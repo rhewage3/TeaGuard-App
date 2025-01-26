@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaGuard Detection App - Upload</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <link href="../assets/aos/aos.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="manifest" href="./manifest.json">
+
+    <style>
+        .upload-hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)), url('../assets/images/disease.png');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 5rem 0;
+        }
+
+        /* Drag and Drop Style */
+        .upload-area {
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background-color: #f0f8e2;
+        }
+
+        .chooseFileButton {
+            background-color: #458847;
+            color: white;
+            border: 0;
+        }
+
+        .chooseFileButton:hover {
+            background-color: #4CAF50;
+        }
+
+        .large-icon {
+            font-size: 8rem;
+            /* Adjust the size as needed */
+        }
+
+
+        .cta p {
+            font-size: 2rem;
+        }
+
+        .cta-image {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)), url('../assets/images/cta.png');
+            /* Update with your image path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+            min-height: 30vh;
+            display: flex;
+            align-items: center;
+
+        }
+
+
+        #download-app-btn {
+            background-color: transparent;
+            color: white;
+            border: 1px white solid;
+            border-radius: 0.5rem;
+            transition: 0.3s;
+        }
+
+        #download-app-btn:hover {
+            background-color: white;
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Nav bar -->
+    <nav class="navbar navbar-expand-lg py-4 py-lg-0 shadow">
+        <div class="container px-4">
+            <a href="../index.html"><img src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#top-navbar" aria-controls="top-navbar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="top-navbar" aria-labelledby="top-navbarLabel">
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#top-navbar" aria-controls="top-navbar">
+                    <div class="d-flex justify-content-between p-3">
+                        <img src="../assets/images/logog_name-removebg-preview.png" alt=""
+                            style="height: 20px; width: 150px;">
+                        <i class="bi bi-x-lg"></i>
+                    </div>
+                </button>
+                <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link"  href="javascript:void(0)" onclick="loadHomePage()">Home</a>
+                    </li>
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link" href="javascript:void(0)" onclick="fetchDetectPage()">Detect</a>
+                    </li>
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Disease Guide</a></li>
+                            <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
+                            <li><a class="dropdown-item" href="#">FAQ</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link text-center" href="#" id="signin">Sign In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <section class="upload-hero py-5 d-flex align-items-center" data-aos="fade-up" data-aos-duration="800">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1 class="display-4 fw-bold" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">Upload Your Tea Leaf Image</h1>
+                    <p class="lead mt-3" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="400">
+                        Select the type of analysis you want to perform and upload a clear image of your tea leaves for an instant assessment.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Detection Type Selection and Upload Area -->
+<section class="detection-options py-5" data-aos="fade-up" data-aos-duration="1000">
+    <div class="container">
+        <!-- Selection Options -->
+        <div class="text-center mb-4" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200">
+            <h3>What do you want to detect?</h3>
+            <div class="btn-group mt-3" role="group">
+                <button class="btn btn-outline-primary" onclick="selectDetection('disease')" data-aos="fade-right" data-aos-duration="800" data-aos-delay="400">Disease Detection</button>
+                <button class="btn btn-outline-success" onclick="selectDetection('ripeness')" data-aos="fade-left" data-aos-duration="800" data-aos-delay="600">Ripeness Detection</button>
+            </div>
+        </div>
+
+        <!-- Upload Area -->
+        <div class="upload-area mt-5" id="upload-area" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+            <h4 id="upload-heading" data-aos="fade-up" data-aos-delay="400">Upload an Image</h4>
+            <p class="mb-3" data-aos="fade-up" data-aos-delay="500">Drag and drop an image here or click to upload.</p>
+            <input type="file" id="imageUpload" class="form-control" accept="image/*" style="display: none;" onchange="handleImage(this)">
+            <button class="btn btn-primary chooseFileButton" onclick="document.getElementById('imageUpload').click()" data-aos="fade-up" data-aos-delay="600">Choose File</button>
+            <div id="image-preview" class="mt-4" data-aos="zoom-in" data-aos-delay="700"></div>
+        </div>
+    </div>
+</section>
+
+
+<section class="analysis-info py-5 bg-light" data-aos="fade-up" data-aos-duration="800">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center mb-4" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200">
+                <!-- Main Icon -->
+                <i class="bi bi-bar-chart-line-fill text-success large-icon"></i>
+            </div>
+            <div class="col-md-6" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="400">
+                <h3>Why Analyze Your Tea Leaves?</h3>
+                <p>By analyzing your tea leaves, you can detect early signs of diseases and determine the optimal ripeness level. This ensures healthier crops, higher yields, and better quality tea production.</p>
+                <p>Simply upload a clear image, and our AI will assess the condition of your leaves within seconds!</p>
+            </div>
+        </div>
+
+        <!-- Additional Benefits with Icons -->
+        <div class="row text-center mt-5">
+            <div class="col-md-4" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                <i class="bi bi-shield-check display-4 text-primary"></i>
+                <h5 class="mt-3">Early Disease Detection</h5>
+                <p>Identify issues before they spread, ensuring your crops remain healthy and productive.</p>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                <i class="bi bi-award-fill display-4 text-warning"></i>
+                <h5 class="mt-3">Optimize Ripeness</h5>
+                <p>Harvest your leaves at the ideal ripeness, enhancing the quality of the final tea product.</p>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+                <i class="bi bi-clock-fill display-4 text-danger"></i>
+                <h5 class="mt-3">Instant Results</h5>
+                <p>Get fast, reliable insights within seconds, helping you make timely decisions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="faq-section py-5" data-aos="fade-up" data-aos-duration="1000">
+    <div class="container">
+        <h3 data-aos="fade-down" data-aos-duration="1000">Frequently Asked Questions</h3>
+        <div class="accordion" id="faqAccordion">
+            <!-- FAQ 1 -->
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="100">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        What kind of image should I upload?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Upload a clear image of your tea leaves in good lighting. Avoid blurry or low-resolution images for best results.
+                    </div>
+                </div>
+            </div>
+            <!-- FAQ 2 -->
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        How long does the analysis take?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Analysis usually takes a few seconds, depending on the file size and internet speed.
+                    </div>
+                </div>
+            </div>
+            <!-- FAQ 3 -->
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="300">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Is my data secure?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Yes, your data is secure. We follow best practices in data security and privacy, ensuring your images and results are confidential and only accessible by you.
+                    </div>
+                </div>
+            </div>
+            <!-- FAQ 4 -->
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="400">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Can I analyze multiple leaves at once?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        For best results, please upload one leaf per image. This allows the AI to focus on analyzing a single leaf without interference from overlapping leaves.
+                    </div>
+                </div>
+            </div>
+            <!-- FAQ 5 -->
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="500">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        Can I use the app offline?
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Currently, the app requires an internet connection for image upload and analysis. Offline analysis is something we are considering for future updates.
+                    </div>
+                </div>
+            </div>
+            <!-- FAQ 6 -->
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="600">
+                <h2 class="accordion-header" id="headingSix">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        How accurate is the disease detection?
+                    </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Our AI model is trained on a large dataset to achieve high accuracy. However, we recommend consulting a specialist for critical decisions as AI predictions may vary based on image quality.
+                    </div>
+                </div>
+            </div>
+            <!-- FAQ 7 -->
+            <div class="accordion-item" data-aos="fade-up" data-aos-delay="700">
+                <h2 class="accordion-header" id="headingSeven">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                        Do I need to register to use the app?
+                    </button>
+                </h2>
+                <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        You can use basic features without registration. However, registering allows you to save analysis history, access premium features, and receive personalized insights.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+    <section class="cta d-flex justify-content-center align-items-center text-center cta-image" id="cta"
+        data-aos="fade-up" data-aos-duration="1000">
+        <div class="container" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200">
+            <div class="row">
+                <div class="col-12" data-aos="fade-up" data-aos-delay="400">
+                    <h3>Download the TeaGuard App for Easy Access</h3>
+                    <p>Stay updated and get instant analyses on your mobile device. <br> Available on iOS and Android.
+                    </p>
+                </div>
+                <div class="col-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="600">
+                    <a href="#" class="btn btn-primary btn-lg" id="download-app-btn">Download TeaGuard</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <footer class="footer  text-light py-4 d-felx justify-content-center align-items-center">
+        <div class="container">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 TeaGuard. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap Bundle with Popper (JavaScript) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/aos/aos.js"></script>
+
+    <script src="../js/requests.js"></script>
+
+    <script>
+
+        AOS.init();
+
+        // Function to handle detection type selection
+        function selectDetection(type) {
+            const heading = document.getElementById("upload-heading");
+            if (type === "disease") {
+                heading.innerText = "Upload Image for Disease Detection";
+            } else if (type === "ripeness") {
+                heading.innerText = "Upload Image for Ripeness Detection";
+            }
+        }
+
+        // Function to preview image on upload
+        function handleImage(input) {
+            const file = input.files[0];
+            const previewContainer = document.getElementById("image-preview");
+            previewContainer.innerHTML = ""; // Clear previous preview
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.alt = "Uploaded Image";
+                    img.style.maxWidth = "100%";
+                    img.style.borderRadius = "8px";
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+
+</html>

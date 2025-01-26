@@ -1,0 +1,525 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaGuard Detection App - Test</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="assets/aos/aos.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/home.css">
+
+    <!-- ios suppourt -->
+    <link rel="apple-touch-icon" href="assets/images/icons/icon_96x96.png">
+    <!-- manifest file -->
+    <link rel="manifest" href="./static/manifest.json">
+
+
+</head>
+
+<body>
+    <!-- nav bar -->
+    <nav class="navbar navbar-expand-lg py-4 py-lg-0 shadow">
+        <div class="container px-4">
+            <a href="index.html"><img src="assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#top-navbar" aria-controls="top-navbar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="top-navbar" aria-labelledby="top-navbarLabel">
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#top-navbar" aria-controls="top-navbar">
+                    <div class="d-flex justify-content-between p-3">
+                        <img src="assets/images/logog_name-removebg-preview.png" alt=""
+                            style="height: 20px; width: 150px;">
+                        <i class="bi bi-x-lg"></i>
+                    </div>
+                </button>
+                <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link"  href="javascript:void(0)" onclick="loadHomePage()">Home</a>
+                    </li>
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link" href="javascript:void(0)" onclick="fetchDetectPage()">Detect</a>
+                    </li>
+                    
+
+
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Disease Guide</a></li>
+                            <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
+                            <li><a class="dropdown-item" href="#">FAQ</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link text-center" href="#" id="signin">Sign In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- hero section -->
+    <section class="hero py-5 d-flex align-items-center" data-aos="fade-up" data-aos-duration="800">
+        <div class="container" data-aos="fade-up" data-aos-delay="100" data-aos-duration="800">
+            <div class="row">
+                <div class="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="800">
+                    <p class="mb-4">
+                        <span class="d-block fs-2 fw-light" data-aos="fade-right" data-aos-delay="300"
+                            data-aos-duration="800">Welcome to</span>
+                        <span class="d-block display-3 fw-bold text-success" data-aos="fade-right" data-aos-delay="400"
+                            data-aos-duration="800">TEAGUARD</span>
+                        <span class="d-block lead mt-3" data-aos="fade-right" data-aos-delay="500"
+                            data-aos-duration="800">
+                            Discover the power of AI-driven insights for healthier tea crops and optimized harvests.
+                            TeaGuard helps you detect diseases early and assess ripeness accurately, ensuring quality
+                            production with ease.
+                        </span>
+                    </p>
+                    <a href="pages/upload.html" class="btn btn-primary btn-lg" id="get-started-btn" data-aos="fade-up"
+                        data-aos-delay="600" data-aos-duration="800">Start Scaning</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <main id="main">
+        <section class="features mt-3 " id="features">
+            <div class="container">
+                <div class="section-title" data-aos="fade-up">
+                    <h2>Key Features</h2>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-4 col-lg-4" data-aos="fade-right" data-aos-delay="100">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 d-flex justify-content-center">
+                                <a href="#" class="key-features" id="diseases" data-aos="zoom-in"></a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 d-flex justify-content-center align-items-center mt-3"
+                                data-aos="fade-up" data-aos-delay="200">
+                                <h4>Disease Detection</h4>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 d-flex justify-content-center align-items-center text-center"
+                                data-aos="fade-up" data-aos-delay="300">
+                                <p>Identify tea leaf diseases early to prevent spread.<br></p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4 col-lg-4" data-aos="fade-right" data-aos-delay="100">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 d-flex justify-content-center">
+                                <a href="#" class="key-features" id="ripeness" data-aos="zoom-in"></a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 d-flex justify-content-center align-items-center mt-3"
+                                data-aos="fade-up" data-aos-delay="200">
+                                <h4>Ripeness Assessment</h4>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 d-flex justify-content-center align-items-center text-center"
+                                data-aos="fade-up" data-aos-delay="300">
+                                <p>Ensure optimal harvest timing with AI insights.<br></p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4 col-lg-4" data-aos="fade-right" data-aos-delay="100">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 d-flex justify-content-center">
+                                <a href="#" class="key-features" id="quality" data-aos="zoom-in"></a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 d-flex justify-content-center align-items-center mt-3"
+                                data-aos="fade-up" data-aos-delay="200">
+                                <h4>Quality Control</h4>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 d-flex justify-content-center align-items-center text-center"
+                                data-aos="fade-up" data-aos-delay="300">
+                                <p>Improve yield quality with precise analysis.<br></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+        <section class="how-it-works mt-3 pt-5 d-flex justify-content-center align-items-center text-center"
+            id="how-it-works">
+            <div class="container">
+                <!-- Section Title with AOS Animation -->
+                <div class="section-title" data-aos="fade-up" data-aos-duration="800">
+                    <h2>How It Works</h2>
+                </div>
+
+                <!-- Steps with AOS Animations -->
+                <div class="row mt-3">
+                    <!-- Step 1 -->
+                    <div class="col-md-3 col-12 mb-4" data-aos="fade-up" data-aos-delay="100" data-aos-duration="800">
+                        <div class="step-icon mb-3">
+                            <i class="bi bi-cloud-upload display-4 text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold">Upload an Image</h4>
+                        <p>Take a clear picture of your tea leaves and upload it to the TeaGuard platform for analysis.
+                        </p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="col-md-3 col-12 mb-4" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+                        <div class="step-icon mb-3">
+                            <i class="bi bi-gear display-4 text-success"></i>
+                        </div>
+                        <h4 class="fw-bold">AI Analysis</h4>
+                        <p>Our AI model analyzes the image to detect disease or ripeness level, providing quick and
+                            accurate results.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="col-md-3 col-12 mb-4" data-aos="fade-up" data-aos-delay="300" data-aos-duration="800">
+                        <div class="step-icon mb-3">
+                            <i class="bi bi-clipboard-check display-4 text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold">Get Instant Results</h4>
+                        <p>Receive detailed results instantly, showing detected disease or ripeness level with
+                            actionable insights.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="col-md-3 col-12 mb-4" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
+                        <div class="step-icon mb-3">
+                            <i class="bi bi-check-circle display-4 text-danger"></i>
+                        </div>
+                        <h4 class="fw-bold">Take Action</h4>
+                        <p>Use the insights to plan treatments or harvest times, ensuring optimal health and quality for
+                            your crop.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <section class="cta d-flex justify-content-center align-items-center text-center cta-image" id="cta"
+            data-aos="fade-up" data-aos-duration="1000">
+            <div class="container" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200">
+                <div class="row">
+                    <div class="col-12" data-aos="fade-up" data-aos-delay="400">
+                        <p>Ready to improve your tea production? Start using TeaGuard today!</p>
+                    </div>
+                    <div class="col-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="600">
+                        <a href="#" class="btn btn-primary btn-lg" id="download-app-btn">Download TeaGuard</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <section class="testimonials mt-3 pt-5" id="testimonial">
+            <div class="container">
+                <div class="section-title text-center" data-aos="fade-up" data-aos-duration="800">
+                    <h2>What are our Customers Saying</h2>
+                </div>
+                <div class="row mt-3" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <!-- Carousel indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
+                            <li data-bs-target="#myCarousel" data-bs-slide-to="1"></li>
+                            <li data-bs-target="#myCarousel" data-bs-slide-to="2"></li>
+                        </ol>
+                        <!-- Wrapper for carousel items -->
+                        <div class="carousel-inner">
+                            <div class="carousel-item active" data-aos="fade-up" data-aos-duration="800">
+                                <div class="row">
+                                    <div class="col-sm-6" data-aos="fade-right" data-aos-delay="300">
+                                        <div class="media">
+                                            <img src="assets/images/profile.png" class="mr-3" alt="">
+                                            <div class="media-body mt-2">
+                                                <div class="testimonial">
+                                                    <p>Lorem ipsum dolor sit amet, consec adipiscing elit. Nam eusem
+                                                        scelerisque tempor, varius quam luctus dui. Mauris magna metus
+                                                        nec.</p>
+                                                    <p class="overview"><b>Paula Wilson</b>, Media Analyst</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" data-aos="fade-left" data-aos-delay="300">
+                                        <div class="media">
+                                            <img src="assets/images/profile.png" class="mr-3" alt="">
+                                            <div class="media-body mt-2">
+                                                <div class="testimonial">
+                                                    <p>Vestibulum quis quam ut magna consequat faucibus. Pellentesque
+                                                        eget mi suscipit tincidunt. Utmtc tempus dictum. Pellentesque
+                                                        virra.</p>
+                                                    <p class="overview"><b>Antonio Moreno</b>, Web Developer</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                                <div class="row">
+                                    <div class="col-sm-6" data-aos="fade-right" data-aos-delay="300">
+                                        <div class="media">
+                                            <img src="assets/images/profile.png" class="mr-3" alt="">
+                                            <div class="media-body mt-2">
+                                                <div class="testimonial">
+                                                    <p>Lorem ipsum dolor sit amet, consec adipiscing elit. Nam eusem
+                                                        scelerisque tempor, varius quam luctus dui. Mauris magna metus
+                                                        nec.</p>
+                                                    <p class="overview"><b>Michael Holz</b>, Seo Analyst</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" data-aos="fade-left" data-aos-delay="300">
+                                        <div class="media">
+                                            <img src="assets/images/profile.png" class="mr-3" alt="">
+                                            <div class="media-body mt-2">
+                                                <div class="testimonial">
+                                                    <p>Vestibulum quis quam ut magna consequat faucibus. Pellentesque
+                                                        eget mi suscipit tincidunt. Utmtc tempus dictum. Pellentesque
+                                                        virra.</p>
+                                                    <p class="overview"><b>Mary Saveley</b>, Web Designer</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                                <div class="row">
+                                    <div class="col-sm-6" data-aos="fade-right" data-aos-delay="300">
+                                        <div class="media">
+                                            <img src="assets/images/profile.png" class="mr-3" alt="">
+                                            <div class="media-body mt-2">
+                                                <div class="testimonial">
+                                                    <p>Lorem ipsum dolor sit amet, consec adipiscing elit. Nam eusem
+                                                        scelerisque tempor, varius quam luctus dui. Mauris magna metus
+                                                        nec.</p>
+                                                    <p class="overview"><b>Martin Sommer</b>, UX Analyst</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" data-aos="fade-left" data-aos-delay="300">
+                                        <div class="media">
+                                            <img src="assets/images/profile.png" class="mr-3" alt="">
+                                            <div class="media-body mt-2">
+                                                <div class="testimonial">
+                                                    <p>Vestibulum quis quam ut magna consequat faucibus. Pellentesque
+                                                        eget mi suscipit tincidunt. Utmtc tempus dictum. Pellentesque
+                                                        virra.</p>
+                                                    <p class="overview"><b>John Williams</b>, Web Developer</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Carousel controls -->
+                        <a class="carousel-control-prev" href="#myCarousel" role="button" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#myCarousel" role="button" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+
+
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="section-title" data-aos="fade-up" data-aos-duration="800">
+                    <h2>Contact Us</h2>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="contact-about">
+                            <img src="assets/images/full_logo-removebg-preview.png" alt="logo">
+                            <p>Cultivate with Confidence, Harvest with Insight.</p>
+                            <div class="social-links">
+                                <a href="#" class="twitter me-2"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="facebook me-2"><i class="bi bi-facebook"></i></a>
+                                <a href="#" class="instagram me-2"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="linkedin me-2"><i class="bi bi-linkedin"></i></a>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-3 col-md-6 mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="200">
+                        <div class="info">
+                            <div>
+                                <i class="ri-map-pin-line"></i>
+                                <p>178/B<br> Sirimavo Bandaranayake mw<br> Galaha</p>
+                            </div>
+
+                            <div>
+                                <i class="ri-mail-send-line"></i>
+                                <p>info@teaguard.com</p>
+                            </div>
+
+                            <div>
+                                <i class="ri-phone-line"></i>
+                                <p>+94 7865 1215 23</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5 col-md-12" data-aos="fade-up" data-aos-delay="300">
+                        <form action="https://api.web3forms.com/submit" method="POST" role="form"
+                            class="php-email-form">
+                            <div class="form-group">
+                                <input type="hidden" name="access_key" value="5af77dcd-a9e9-482b-902c-4efeb85f27d0">
+                                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="Your Email" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="subject" id="subject"
+                                    placeholder="Subject" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" name="message" rows="5" placeholder="Message"
+                                    required></textarea>
+                            </div>
+                            <div class="my-3">
+                                <div class="loading">Loading</div>
+                                <div class="error-message"></div>
+                                <div class="sent-message">Your message has been sent. Thank you!</div>
+                            </div>
+                            <div class="text-center"><button type="submit">Send Message</button></div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+    </main>
+
+
+    <footer class="footer  text-light py-4 d-felx justify-content-center align-items-center">
+        <div class="container">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 TeaGuard. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap Bundle with Popper (JavaScript) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="assets/aos/aos.js"></script>
+
+    <script src="js/requests.js"></script>
+
+
+    <script>
+        AOS.init();
+
+
+
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+            // Show the install button
+            document.getElementById('download-app-btn').style.display = 'inline-block';
+        });
+
+        document.getElementById('download-app-btn').addEventListener('click', (e) => {
+            // Check if the deferredPrompt is available
+            if (deferredPrompt) {
+                // Show the install prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    // Clear the deferredPrompt variable, as it can only be used once
+                    deferredPrompt = null;
+                });
+            }
+        });
+
+      
+    </script>
+</body>
+
+</html>

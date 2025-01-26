@@ -1,0 +1,36 @@
+{
+    "name": "TeaGuard",
+    "short_name": "TeaGuard",
+    "start_url": "/TeaGuard/index.html",
+    "display": "standalone",
+    "background_color": "#e8bd95",
+    "theme_color": "#8c5c30",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "../assets/images/icons/icon_72x72.png",
+            "type": "image/png",
+            "sizes": "72x72"
+        },
+        {
+            "src": "../assets/images/icons/icon_96x96.png",
+            "type": "image/png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "../assets/images/icons/icon_128x128.png",
+            "type": "image/png",
+            "sizes": "128x128"
+        },
+        {
+            "src": "../assets/images/icons/icon_144x144.png",
+            "type": "image/png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "../assets/images/icons/icon_152x152.png",
+            "type": "image/png",
+            "sizes": "152x152"
+        }
+    ]
+}

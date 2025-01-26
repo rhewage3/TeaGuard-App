@@ -1,0 +1,339 @@
+:root {
+    /* Main Color: Earthy Brown */
+    --main-color: #8B5A2B; /* Rich brown color */
+
+    /* Secondary Color: Tea Leaf Green */
+    --secondary-color: #458847; /* Tea leaf green */
+
+    /* Accent Color: Light Cream */
+    --accent-color: #FAF3E0; /* Soft, light cream color */
+}
+
+
+.hero {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)), url('../assets/images/bp.png'); /* Update with your image path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+}
+
+
+#get-started-btn {
+    background-color: transparent;
+    color: white;
+    border:  1px white solid;
+    border-radius: 0.5rem;
+    transition: 0.3s;
+}
+#get-started-btn:hover {
+    background-color: white;
+    color: var(--secondary-color);
+}
+
+
+#download-app-btn {
+    background-color: transparent;
+    color: white;
+    border:  1px white solid;
+    border-radius: 0.5rem;
+    transition: 0.3s;
+}
+#download-app-btn:hover {
+    background-color: white;
+    color: var(--secondary-color);
+}
+
+
+
+.key-features {
+    border-radius: 50%;
+    background-color:#e8f4ea ; 
+    height: 250px;
+     width: 250px;
+}
+
+
+
+#diseases {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../assets/images/virus.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain; 
+  background-size: 8.75rem 8.75rem; 
+  transition: transform 0.5s;
+}
+
+#ripeness {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../assets/images/green-tea.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain; 
+  background-size: 8.75rem 8.75rem; 
+  transition: transform 0.5s;
+}
+
+#quality {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../assets/images/quality.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain; 
+  background-size: 8.75rem 8.75rem; 
+  transition: transform 0.5s;
+}
+
+
+
+.carousel .carousel-item {
+	color: #999;
+	overflow: hidden;
+	min-height: 120px;
+	font-size: 13px;
+}
+.carousel .media img {
+	width: 80px;
+	height: 80px;
+	display: block;
+	border-radius: 50%;
+}
+.carousel .testimonial {
+	padding: 0 15px 0 60px ;
+	position: relative;
+}
+.carousel .testimonial::before {
+	content: "\201C";
+	font-family: Arial,sans-serif;
+	color: #e2e2e2;
+	font-weight: bold;
+	font-size: 68px;
+	line-height: 54px;
+	position: absolute;
+	left: 15px;
+	top: 0;
+}
+.carousel .overview b {
+	text-transform: uppercase;
+	color: #1c47e3;
+}
+.carousel .carousel-indicators {
+	bottom: -40px;
+}
+.carousel-indicators li, .carousel-indicators li.active {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	margin: 1px 3px;
+	box-sizing: border-box;
+}
+.carousel-indicators li {	
+	background: #e2e2e2;
+	border: 4px solid #fff;
+}
+.carousel-indicators li.active {
+	color: #fff;
+	background: #1c47e3;    
+	border: 5px double;    
+}
+
+
+.cta p {
+    font-size: 2rem;
+}
+
+.cta-image {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)), url('../assets/images/cta.png'); /* Update with your image path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    min-height: 30vh;
+    display: flex;
+    align-items: center;
+  
+}
+
+
+
+
+  
+/*--------------------------------------------------------------
+# Contact
+--------------------------------------------------------------*/
+
+
+
+.contact .contact-about h3 {
+    font-size: 28px;
+    margin: 0 0 10px 0;
+    padding: 0;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #222222;
+  }
+  
+  .contact .contact-about p {
+    font-size: 14px;
+    line-height: 24px;
+    font-family: "Raleway", sans-serif;
+    color: #888;
+  }
+  
+  .contact .social-links {
+    padding-bottom: 20px;
+  }
+  
+  .contact .social-links a {
+    font-size: 18px;
+    display: inline-block;
+    background: #fff;
+    color: #9DBD86;
+    line-height: 1;
+    padding: 8px 0;
+    margin-right: 4px;
+    border-radius: 50%;
+    text-align: center;
+    width: 36px;
+    height: 36px;
+    transition: 0.3s;
+    border: 1px solid #9DBD86;
+    text-decoration: none;
+  }
+  
+  .contact .social-links a:hover {
+    background: #9DBD86;
+    color: #fff;
+  }
+  
+  .contact .info {
+    color: #444444;
+  }
+  
+  .contact .info i {
+    font-size: 32px;
+    color: #9DBD86;
+    float: left;
+    line-height: 1;
+  }
+  
+  .contact .info p {
+    padding: 0 0 10px 42px;
+    line-height: 28px;
+    font-size: 14px;
+  }
+  
+  .contact .php-email-form .error-message {
+    display: none;
+    color: #fff;
+    background: #ed3c0d;
+    text-align: left;
+    padding: 15px;
+    font-weight: 600;
+  }
+  
+  .contact .php-email-form .error-message br+br {
+    margin-top: 25px;
+  }
+  
+  .contact .php-email-form .sent-message {
+    display: none;
+    color: #fff;
+    background: var(--secondary-color);
+    text-align: center;
+    padding: 15px;
+    font-weight: 600;
+  }
+  
+  .contact .php-email-form .loading {
+    display: none;
+    background: #fff;
+    text-align: center;
+    padding: 15px;
+  }
+  
+  .contact .php-email-form .loading:before {
+    content: "";
+    display: inline-block;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    margin: 0 10px -6px 0;
+    border: 3px solid #18d26e;
+    border-top-color: #eee;
+    animation: animate-loading 1s linear infinite;
+  }
+  
+  .contact .php-email-form .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .contact .php-email-form input,
+  .contact .php-email-form textarea {
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+  
+  .contact .php-email-form input:focus,
+  .contact .php-email-form textarea:focus {
+    border-color:var(--secondary-color);
+  }
+  
+  .contact .php-email-form button[type=submit] {
+    background: var(--secondary-color);
+    border: 0;
+    padding: 10px 24px;
+    color: #fff;
+    transition: 0.4s;
+    border-radius: 50px;
+  }
+  
+  .contact .php-email-form button[type=submit]:hover {
+    background:var(--main-color);
+  }
+  
+  @keyframes animate-loading {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+
+
+@media (max-width: 768px) {
+    .welcome-title {
+        font-size: 2rem; 
+    }
+
+    .app-name {
+        font-size: 3rem; 
+    }
+
+    .description {
+        font-size: 1rem;
+    }
+
+    .hero {
+        text-align: center; 
+    }
+}
+
+
+
