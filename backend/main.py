@@ -33,6 +33,7 @@ async def show_routes():
 # Serve the main index.html
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
+    print("home page working")
     index_path = FRONTEND_DIR / "index.html"
     if index_path.exists():
         return HTMLResponse(content=index_path.read_text(), status_code=200)
@@ -52,7 +53,7 @@ async def serve_upload_page():
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #ML PART___________________________________________________________________________________________________________________________________________________________
 
-DISEASE_MODEL_PATH = r"R:\IIT\FYP\PROJECT\backend\model\2nd_model.keras"
+DISEASE_MODEL_PATH = r"R:\IIT\FYP\PROJECT\backend\model\final_model.keras"
 
 
 try:
