@@ -21,7 +21,7 @@ function loadHomePage() {
 
 
 function fetchDetectPage() {
-    fetch('/upload')  // Corrected to match the FastAPI endpoint
+    fetch('/upload')  
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch the upload page.');
