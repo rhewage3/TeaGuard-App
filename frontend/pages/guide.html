@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaGuard - Disease Prevention Guide</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <link href="assets/aos/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('assets/images/tea-garden.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .icon-container {
+            font-size: 5rem;
+            color: #4CAF50;
+        }
+
+        .guide-section {
+            padding: 4rem 0;
+        }
+
+        .guide-card {
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .disease-img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .prevention-list li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg py-4 py-lg-0 shadow">
+        <div class="container px-4">
+            <a href="javascript:void(0)" onclick="loadHomePage()"><img src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#top-navbar" aria-controls="top-navbar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="top-navbar" aria-labelledby="top-navbarLabel">
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#top-navbar" aria-controls="top-navbar">
+                    <div class="d-flex justify-content-between p-3">
+                        <img src="assets/images/logog_name-removebg-preview.png" alt=""
+                            style="height: 20px; width: 150px;">
+                        <i class="bi bi-x-lg"></i>
+                    </div>
+                </button>
+                <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link"  href="javascript:void(0)" onclick="loadHomePage()">Home</a>
+                    </li>
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link" href="javascript:void(0)" onclick="fetchDetectPage()">Detect</a>
+                    </li>
+                    
+
+
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="fetchGuidePage()">Disease Guide</a></li>
+                            <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
+                            <li><a class="dropdown-item" href="#">FAQ</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link text-center" href="#" id="signin">Sign In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" data-aos="fade-up">
+        <div class="container">
+            <h1 class="display-4 fw-bold" data-aos="fade-right">Tea Disease Prevention & Treatment Guide</h1>
+            <p class="lead mt-3" data-aos="fade-left">
+                Comprehensive guide to prevent and manage common tea plant diseases.
+            </p>
+        </div>
+    </section>
+
+    <!-- Disease Guide Section -->
+    <section class="guide-section">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold" data-aos="fade-up">Common Tea Leaf Diseases</h2>
+
+            <div class="row gy-5">
+                <!-- Red Spot Disease -->
+                <div class="col-md-6" data-aos="fade-up">
+                    <div class="card guide-card shadow p-4">
+                        <div class="row align-items-center">
+                            <div class="col-4 text-center">
+                                <i class="bi bi-bug icon-container text-danger"></i>
+                            </div>
+                            <div class="col-8">
+                                <h4 class="fw-bold text-danger">Red Spot Disease</h4>
+                                <p><strong>Causes:</strong> Fungal infection due to excess humidity.</p>
+                                <p><strong>Symptoms:</strong> Small red spots appear, leading to leaf discoloration.</p>
+                                <h5 class="fw-bold mt-3">Prevention</h5>
+                                <ul class="prevention-list">
+                                    <li>Prune infected leaves regularly.</li>
+                                    <li>Apply copper-based fungicides every two weeks.</li>
+                                    <li>Ensure proper air circulation in the plantation.</li>
+                                    <li>Avoid water stagnation around the roots.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Algal Spot -->
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card guide-card shadow p-4">
+                        <div class="row align-items-center">
+                            <div class="col-4 text-center">
+                                <i class="bi bi-water icon-container text-primary"></i>
+                            </div>
+                            <div class="col-8">
+                                <h4 class="fw-bold text-primary">Algal Spot</h4>
+                                <p><strong>Causes:</strong> High moisture and poor drainage.</p>
+                                <p><strong>Symptoms:</strong> Reddish-brown spots with slimy texture.</p>
+                                <h5 class="fw-bold mt-3">Prevention</h5>
+                                <ul class="prevention-list">
+                                    <li>Improve drainage and avoid over-irrigation.</li>
+                                    <li>Use copper-based sprays for control.</li>
+                                    <li>Remove affected leaves promptly.</li>
+                                    <li>Maintain plant spacing to avoid overcrowding.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gray Blight -->
+                <div class="col-md-6" data-aos="fade-up">
+                    <div class="card guide-card shadow p-4">
+                        <div class="row align-items-center">
+                            <div class="col-4 text-center">
+                                <i class="bi bi-cloud-rain icon-container text-secondary"></i>
+                            </div>
+                            <div class="col-8">
+                                <h4 class="fw-bold text-secondary">Gray Blight</h4>
+                                <p><strong>Causes:</strong> Fungal spores spread by wind and rain.</p>
+                                <p><strong>Symptoms:</strong> Gray lesions leading to leaf curling.</p>
+                                <h5 class="fw-bold mt-3">Prevention</h5>
+                                <ul class="prevention-list">
+                                    <li>Apply broad-spectrum fungicides monthly.</li>
+                                    <li>Avoid excessive nitrogen fertilization.</li>
+                                    <li>Regularly inspect plantations for early detection.</li>
+                                    <li>Maintain proper field sanitation.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brown Blight -->
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card guide-card shadow p-4">
+                        <div class="row align-items-center">
+                            <div class="col-4 text-center">
+                                <i class="bi bi-flower1 icon-container text-brown"></i>
+                            </div>
+                            <div class="col-8">
+                                <h4 class="fw-bold text-warning">Brown Blight</h4>
+                                <p><strong>Causes:</strong> Excessive shading and wet conditions.</p>
+                                <p><strong>Symptoms:</strong> Irregular brown lesions with yellow halos.</p>
+                                <h5 class="fw-bold mt-3">Prevention</h5>
+                                <ul class="prevention-list">
+                                    <li>Ensure proper sunlight exposure.</li>
+                                    <li>Use potassium-rich fertilizers.</li>
+                                    <li>Prune the plantation to reduce humidity.</li>
+                                    <li>Apply neem oil as an organic preventive measure.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Helopeltis (Tea Mosquito Bug) -->
+                <div class="col-md-6" data-aos="fade-up">
+                    <div class="card guide-card shadow p-4">
+                        <div class="row align-items-center">
+                            <div class="col-4 text-center">
+                                <i class="bi bi-bug-fill icon-container text-danger"></i>
+                            </div>
+                            <div class="col-8">
+                                <h4 class="fw-bold text-danger">Helopeltis (Tea Mosquito Bug)</h4>
+                                <p><strong>Causes:</strong> Insect infestation causing puncture marks.</p>
+                                <p><strong>Symptoms:</strong> Feeding marks leading to leaf drop.</p>
+                                <h5 class="fw-bold mt-3">Prevention</h5>
+                                <ul class="prevention-list">
+                                    <li>Introduce natural predators like ladybugs.</li>
+                                    <li>Spray neem oil or insecticides regularly.</li>
+                                    <li>Inspect plants weekly for early detection.</li>
+                                    <li>Maintain weed-free surroundings.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-4 bg-dark text-light">
+        <p>&copy; 2024 TeaGuard. All Rights Reserved.</p>
+    </footer>
+
+    <script src="assets/aos/aos.js"></script>
+    <script>AOS.init();</script>
+
+</body>
+
+</html>

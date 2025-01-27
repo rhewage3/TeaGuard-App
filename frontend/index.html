@@ -18,6 +18,13 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/home.css">
 
+        <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <!-- ios suppourt -->
     <link rel="apple-touch-icon" href="assets/images/icons/icon_96x96.png">
     <!-- manifest file -->
@@ -63,7 +70,7 @@
                             Resources
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Disease Guide</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="fetchGuidePage()">Disease Guide</a></li>
                             <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
                             <li><a class="dropdown-item" href="#">FAQ</a></li>
                         </ul>
@@ -94,7 +101,7 @@
                             production with ease.
                         </span>
                     </p>
-                    <a href="pages/upload.html" class="btn btn-primary btn-lg" id="get-started-btn" data-aos="fade-up"
+                    <a href="javascript:void(0)" onclick="fetchDetectPage()" class="btn btn-primary btn-lg" id="get-started-btn" data-aos="fade-up"
                         data-aos-delay="600" data-aos-duration="800">Start Scaning</a>
                 </div>
             </div>
@@ -482,44 +489,10 @@
     <script src="assets/aos/aos.js"></script>
 
     <script src="js/requests.js"></script>
+    <script src="js/functions.js"></script>
 
 
-    <script>
-        AOS.init();
-
-
-
-        let deferredPrompt;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent the mini-infobar from appearing on mobile
-            e.preventDefault();
-            // Stash the event so it can be triggered later
-            deferredPrompt = e;
-            // Show the install button
-            document.getElementById('download-app-btn').style.display = 'inline-block';
-        });
-
-        document.getElementById('download-app-btn').addEventListener('click', (e) => {
-            // Check if the deferredPrompt is available
-            if (deferredPrompt) {
-                // Show the install prompt
-                deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
-                    } else {
-                        console.log('User dismissed the install prompt');
-                    }
-                    // Clear the deferredPrompt variable, as it can only be used once
-                    deferredPrompt = null;
-                });
-            }
-        });
-
-      
-    </script>
+    
 </body>
 
 </html>

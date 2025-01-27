@@ -48,6 +48,14 @@ async def serve_upload_page():
         return HTMLResponse(content=upload_path.read_text(), status_code=200)
     return HTMLResponse(content="Upload pAge not found", status_code=404)
 
+@app.get("/guide", response_class=HTMLResponse)
+async def serve_guide_page():
+    print("detect page working")
+    upload_path = FRONTEND_DIR/"pages"/"guide.html"
+    if upload_path.exists():
+        return HTMLResponse(content=upload_path.read_text(), status_code=200)
+    return HTMLResponse(content="Upload pAge not found", status_code=404)
+
 
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -66,7 +74,7 @@ CLASS_LABLES_DISEASE = ['algal_spot',"brown_blight","gray_blight","healthy","hel
 
 
 
-@app.post('/predict')
+@app.post('/predict-disease')
 async def predict_disease(file: UploadFile = File(...)):
     try:
         # Read image from the uploaded file

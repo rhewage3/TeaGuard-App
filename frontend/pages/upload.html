@@ -17,6 +17,13 @@
 
     <link href="../assets/aos/aos.css" rel="stylesheet">
 
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <link rel="stylesheet" href="../css/main.css">
     <link rel="manifest" href="./manifest.json">
 
@@ -88,6 +95,54 @@
             background-color: white;
             color: var(--secondary-color);
         }
+
+        #image-preview img {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #scanButton {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #scanButton:hover {
+            background-color: #45a049;
+        }
+
+        #result-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            border-left: 5px solid #4CAF50;
+        }
+
+        #result-card p {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        #result-card img {
+            max-width: 100%;
+            border-radius: 10px;
+            border: 3px solid #4CAF50;
+        }
+
+        #result-card .btn-outline-secondary {
+            font-weight: bold;
+            padding: 10px 20px;
+        }
     </style>
 </head>
 
@@ -127,7 +182,8 @@
                             Resources
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Disease Guide</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="fetchGuidePage()">Disease
+                                    Guide</a></li>
                             <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
                             <li><a class="dropdown-item" href="#">FAQ</a></li>
                         </ul>
@@ -158,10 +214,8 @@
     </section>
 
 
-    <!-- Detection Type Selection and Upload Area -->
     <section class="detection-options py-5" data-aos="fade-up" data-aos-duration="1000">
         <div class="container">
-            <!-- Selection Options -->
             <div class="text-center mb-4" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200">
                 <h3>What do you want to detect?</h3>
                 <div class="btn-group mt-3" role="group">
@@ -173,20 +227,53 @@
             </div>
 
             <!-- Upload Area -->
-            <div class="upload-area mt-5" id="upload-area" data-aos="fade-up" data-aos-duration="1000"
-                data-aos-delay="300">
-                <h4 id="upload-heading" data-aos="fade-up" data-aos-delay="400">Upload an Image</h4>
-                <p class="mb-3" data-aos="fade-up" data-aos-delay="500">Drag and drop an image here or click to upload.
-                </p>
-                <input type="file" id="imageUpload" class="form-control" accept="image/*" style="display: none;"
-                    onchange="handleImage(this)">
-                <button class="btn btn-primary chooseFileButton"
-                    onclick="document.getElementById('imageUpload').click()" data-aos="fade-up"
-                    data-aos-delay="600">Choose File</button>
-                <div id="image-preview" class="mt-4" data-aos="zoom-in" data-aos-delay="700"></div>
+            <div class="upload-area mt-5 py-5 px-4 border rounded shadow-lg" id="upload-area" data-aos="fade-up"
+                data-aos-duration="1000" data-aos-delay="300" style="pointer-events: none; opacity: 0.5;">
+                <h4 id="upload-heading" class="fw-bold mb-3">Select Detection Type First</h4>
+                <p class="mb-3">Drag and drop an image here or click the button to upload.</p>
+                <div class="d-flex flex-column align-items-center">
+                    <input type="file" id="imageUpload" class="form-control d-none" accept="image/*"
+                        onchange="handleImage(this)">
+                    <button class="btn btn-lg btn-outline-primary chooseFileButton"
+                        onclick="document.getElementById('imageUpload').click()" disabled>
+                        <i class="bi bi-upload"></i> Choose File
+                    </button>
+                </div>
+
+                <!-- Image Preview -->
+                <div id="image-preview" class="mt-4"></div>
+
+                <!-- Scan Button -->
+                <div class="text-center mt-4">
+                    <button id="scanButton" class="btn btn-lg btn-success shadow-lg" style="display: none;"
+                        onclick="scanImage()">
+                        <i class="bi bi-search"></i> Scan Image
+                    </button>
+                </div>
             </div>
+
+            <!-- Result Display Section -->
+            <div id="result-card" class="mt-4 p-5 border rounded shadow-lg bg-light"
+                style="display: none; max-width: 700px; margin: auto;">
+                <h4 class="fw-bold text-center">Scan Results</h4>
+                <div id="result-content" class="mt-4 row align-items-center">
+                    <div class="col-12 text-center">
+                        <p class="fw-semibold">Analyzing...</p>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-secondary btn-lg" onclick="clearResults()">Try Another Image</button>
+                    <a href="javascript:void(0)" id="learnMoreBtn" class="btn btn-primary btn-lg ms-3"
+                        style="display: none;">Learn More</a>
+                </div>
+            </div>
+
+
+
+
         </div>
     </section>
+
 
 
     <section class="analysis-info py-5 bg-light" data-aos="fade-up" data-aos-duration="800">
@@ -391,40 +478,6 @@
 
     <script src="../js/requests.js"></script>
 
-    <script>
-
-        AOS.init();
-
-        // Function to handle detection type selection
-        function selectDetection(type) {
-            const heading = document.getElementById("upload-heading");
-            if (type === "disease") {
-                heading.innerText = "Upload Image for Disease Detection";
-            } else if (type === "ripeness") {
-                heading.innerText = "Upload Image for Ripeness Detection";
-            }
-        }
-
-        // Function to preview image on upload
-        function handleImage(input) {
-            const file = input.files[0];
-            const previewContainer = document.getElementById("image-preview");
-            previewContainer.innerHTML = ""; // Clear previous preview
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement("img");
-                    img.src = e.target.result;
-                    img.alt = "Uploaded Image";
-                    img.style.maxWidth = "100%";
-                    img.style.borderRadius = "8px";
-                    previewContainer.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    </script>
 </body>
 
 </html>
