@@ -1,5 +1,16 @@
 AOS.init();
 
+
+
+function closeOffcanvas() {
+    let offcanvasElement = document.querySelector('#top-navbar');
+    let bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+    if (bsOffcanvas) {
+        bsOffcanvas.hide();
+    }
+}
+
+
 let deferredPrompt;
 
 window.addEventListener("beforeinstallprompt", (e) => {
