@@ -30,6 +30,20 @@ async def show_routes():
         print(f"Registered route: {route.path}")
 
 
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://rhewage3.github.io/TeaGuard-Disease-and-Ripeness-Assestment"],  # Removed trailing slash
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
+
 # Serve the main index.html
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
