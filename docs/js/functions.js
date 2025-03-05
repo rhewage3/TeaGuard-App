@@ -1,3 +1,6 @@
+
+
+
 AOS.init();
 
 function closeOffcanvas() {
@@ -7,6 +10,72 @@ function closeOffcanvas() {
         bsOffcanvas.hide();
     }
 }
+
+///after user logged in cahngin the nav bar
+function updateNavbar() {
+  console.log(" Updating Navbar...");
+  
+  // Check if user is logged in
+  const username = localStorage.getItem("username");
+
+  if (username) {
+      console.log(" User logged in, updating navbar...");
+      
+      // Get the Sign In button
+      const signInElement = document.getElementById("signin");
+
+      if (signInElement) {
+          // Change Sign In to User Profile
+          signInElement.innerHTML = `<i class="bi bi-person-circle"></i> ${username}`;
+          signInElement.href = "javascript:void(0)"; // Prevent navigation
+      }
+  } else {
+      console.log(" No user found, showing Sign In button");
+  }
+}
+
+// Run on page load
+document.addEventListener("DOMContentLoaded", updateNavbar);
+
+
+// Logout function
+function logout() {
+  localStorage.removeItem("username");
+  window.location.reload();  // Refresh the page
+}
+
+
+async function loginUser(event) {
+  event.preventDefault(); // Prevent default form submission
+  console.log(" Login button clicked! Function triggered.");  // Debugging
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const formData = new URLSearchParams();  
+  formData.append("username", email);
+  formData.append("password", password);
+
+  const response = await fetch("/login", {  
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData
+  });
+
+  if (response.ok) {
+      console.log(" Login successful!");
+      const data = await response.json();  
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("username", email);
+      updateNavbar();
+      window.location.href = "/";
+  } else {
+      console.log(" Login failed. Check credentials.");
+      alert("Login failed. Please check your credentials.");
+  }
+}
+
+
 
 
 let deferredPrompt;

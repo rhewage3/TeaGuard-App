@@ -51,6 +51,7 @@ async def register_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
 #  LOGIN USER ROUTE
 @router.post("/login")
 async def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
+    print("log in API called")
     # Fetch user by email
     result = await db.execute(select(User).filter(User.email == form_data.username))
     user = result.scalars().first()
