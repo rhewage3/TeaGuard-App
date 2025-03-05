@@ -1,7 +1,5 @@
 AOS.init();
 
-
-
 function closeOffcanvas() {
     let offcanvasElement = document.querySelector('#top-navbar');
     let bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
@@ -150,102 +148,98 @@ function handleImage(input) {
   }
 
 // Disease name mapping with respective URLs for prevention guidance
-const diseaseMapping = {
-    red_spot: { name: "Red Spot Disease", url: "#" },
-    brown_blight: { name: "Brown Blight Disease", url: "#" },
-    gray_blight: { name: "Gray Blight Disease", url: "#" },
-    healthy: { name: "Healthy - No Disease", url: "#" },
-    helopeltis: { name: "Helopeltis Disease", url: "#" },
+// Mapping for disease names and ripeness levels
+const resultMapping = {
+  algal_spot: { name: "Algal Spot Disease", icon: "bi-exclamation-triangle-fill", color: "text-danger" },
+  red_spot: { name: "Red Spot Disease", icon: "bi-exclamation-triangle-fill", color: "text-danger" },
+  brown_blight: { name: "Brown Blight Disease", icon: "bi-exclamation-triangle-fill", color: "text-danger" },
+  gray_blight: { name: "Gray Blight Disease", icon: "bi-exclamation-triangle-fill", color: "text-danger" },
+  helopeltis: { name: "Helopeltis Disease", icon: "bi-exclamation-triangle-fill", color: "text-danger" },
+  healthy: { name: "Healthy - No Disease", icon: "bi-emoji-smile-fill", color: "text-success" },
+  
+  // Ripeness results
+  ripe: { name: "Ripe Tea Buds", icon: "bi-check-circle-fill", color: "text-success" },
+  unripe: { name: "Unripe Tea Buds", icon: "bi-hourglass-split", color: "text-warning" },
+  overripe: { name: "Overripe Tea Buds", icon: "bi-exclamation-triangle-fill", color: "text-danger" }
 };
 
 function scanImage() {
-    const imageInput = document.getElementById("imageUpload");
+  const imageInput = document.getElementById("imageUpload");
 
-    if (!imageInput.files.length) {
-        Swal.fire({
-            title: "No Image Selected",
-            text: "Please upload an image before scanning.",
-            icon: "error",
-            confirmButtonColor: "#4CAF50"
-        });
-        return;
-    }
+  if (!imageInput.files.length) {
+      Swal.fire({
+          title: "No Image Selected",
+          text: "Please upload an image before scanning.",
+          icon: "error",
+          confirmButtonColor: "#4CAF50"
+      });
+      return;
+  }
 
-    const formData = new FormData();
-    formData.append("file", imageInput.files[0]);
+  const formData = new FormData();
+  formData.append("file", imageInput.files[0]);
 
-    // Determine API endpoint based on detection type
-    let apiEndpoint = detectionType === "disease" ? "/predict-disease" : "/predict-ripeness";
+  // Determine API endpoint based on detection type
+  let apiEndpoint = detectionType === "disease" ? "/predict-disease" : "/predict-ripeness";
 
-    // Show loading in result section
-    const resultCard = document.getElementById("result-card");
-    const resultContent = document.getElementById("result-content");
+  // Show loading in result section
+  const resultCard = document.getElementById("result-card");
+  const resultContent = document.getElementById("result-content");
 
-    resultCard.style.display = "block";
-    resultContent.innerHTML = `<div class="col-12 text-center">
-                                  <div class="spinner-border text-success" role="status">
-                                      <span class="visually-hidden">Loading...</span>
-                                  </div>
-                                  <p class="mt-2">Analyzing your image...</p>
-                              </div>`;
+  resultCard.style.display = "block";
+  resultContent.innerHTML = `<div class="col-12 text-center">
+                                <div class="spinner-border text-success" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2">Analyzing your image...</p>
+                            </div>`;
 
-    // Send the image to the backend for processing
-    fetch(apiEndpoint, {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        let resultKey = data.class.toLowerCase();
-        let diseaseInfo = diseaseMapping[resultKey] || { name: "Unknown Condition", url: "#" };
+  // Send the image to the backend for processing
+  fetch(apiEndpoint, {
+      method: "POST",
+      body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+      let resultKey = data.class.toLowerCase();
+      let resultInfo = resultMapping[resultKey] || { name: "Unknown Condition", icon: "bi-question-circle-fill", color: "text-muted" };
 
-        // Determine icon and color based on result
-        let resultIcon, resultTextColor;
-        
-        if (resultKey === "healthy") {
-            resultIcon = '<i class="bi bi-emoji-smile-fill text-success display-1"></i>';
-            resultTextColor = "text-success";
-        } else {
-            resultIcon = '<i class="bi bi-exclamation-triangle-fill text-danger display-1"></i>';
-            resultTextColor = "text-danger";
-        }
+      // Show results dynamically with Bootstrap grid layout
+      resultContent.innerHTML = `
+          <div class="row align-items-center">
+              <div class="col-md-4 text-center">
+                  <i class="bi ${resultInfo.icon} ${resultInfo.color} display-1"></i>
+              </div>
+              <div class="col-md-8">
+                  <h3 class="fw-bold ${resultInfo.color}">${resultInfo.name}</h3>
+                  <p class="fs-5"><strong>Result:</strong> <span class="${resultInfo.color}">${resultInfo.name}</span></p>
+                  <p class="fs-5"><strong>Confidence:</strong> <span class="text-info">${data.confidence}</span></p>
+              </div>
+          </div>
+      `;
 
-        // Show results dynamically with Bootstrap grid layout
-        resultContent.innerHTML = `
-            <div class="row align-items-center">
-                <div class="col-md-4 text-center">
-                    ${resultIcon}
-                </div>
-                <div class="col-md-8">
-                    <h3 class="fw-bold ${resultTextColor}">${diseaseInfo.name}</h3>
-                    <p class="fs-5"><strong>Result:</strong> <span class="${resultTextColor}">${diseaseInfo.name}</span></p>
-                    <p class="fs-5"><strong>Confidence:</strong> <span class="text-info">${data.confidence}</span></p>
-                </div>
-            </div>
-        `;
+      // Hide "Learn More" button for ripeness assessment
+      const learnMoreBtn = document.getElementById("learnMoreBtn");
+      if (detectionType === "disease" && resultKey !== "healthy") {
+          learnMoreBtn.style.display = "inline-block";
+          learnMoreBtn.setAttribute("onclick", `fetchGuidePage()`);
+      } else {
+          learnMoreBtn.style.display = "none";
+      }
 
-        // Show the "Learn More" button only if not healthy
-        const learnMoreBtn = document.getElementById("learnMoreBtn");
-        if (resultKey !== "healthy") {
-            learnMoreBtn.style.display = "inline-block";
-            learnMoreBtn.setAttribute("onclick", `fetchGuidePage('${diseaseInfo.url}')`);
-        } else {
-            learnMoreBtn.style.display = "none";
-        }
-
-        // Add animation to the result card
-        resultCard.classList.add("animate__animated", "animate__fadeInUp");
-    })
-    .catch(error => {
-        resultContent.innerHTML = `
-            <div class="col-md-12 text-center">
-                <i class="bi bi-exclamation-circle text-danger display-1"></i>
-                <h5 class="mt-3 text-danger">Error Occurred</h5>
-                <p class="text-muted">Something went wrong while scanning the image. Please try again.</p>
-            </div>
-        `;
-        console.error("Error scanning the image:", error);
-    });
+      // Add animation to the result card
+      resultCard.classList.add("animate__animated", "animate__fadeInUp");
+  })
+  .catch(error => {
+      resultContent.innerHTML = `
+          <div class="col-md-12 text-center">
+              <i class="bi bi-exclamation-circle text-danger display-1"></i>
+              <h5 class="mt-3 text-danger">Error Occurred</h5>
+              <p class="text-muted">Something went wrong while scanning the image. Please try again.</p>
+          </div>
+      `;
+      console.error("Error scanning the image:", error);
+  });
 }
 
 // Function to clear results and allow new upload

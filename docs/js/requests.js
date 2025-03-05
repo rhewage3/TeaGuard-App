@@ -1,6 +1,44 @@
 
 console.log("requests js working")
 
+
+function fetchSignIn() {
+    fetch('/signIn')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch the sign-in page.');
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.body.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error loading the sign-in page:', error);
+        });
+}
+
+
+
+function fetchLogIn() {
+    fetch('/logIn')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch the log-in page.');
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.body.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error loading the log-in page:', error);
+        });
+}
+
+
+
+
 function loadHomePage() {
     fetch('/')
         .then(response => {

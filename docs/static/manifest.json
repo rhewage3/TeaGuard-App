@@ -1,7 +1,7 @@
 {
     "name": "TeaGuard",
     "short_name": "TeaGuard",
-    "start_url": "/TeaGuard/index.html",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#e8bd95",
     "theme_color": "#8c5c30",

@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg py-4 py-lg-0 shadow">
+    <div class="container px-4">
+        <a href="javascript:void(0)" onclick="loadHomePage()"><img src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#top-navbar" aria-controls="top-navbar">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="top-navbar" aria-labelledby="top-navbarLabel">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#top-navbar" aria-controls="top-navbar">
+                <div class="d-flex justify-content-between p-3">
+                    <img src="assets/images/logog_name-removebg-preview.png" alt=""
+                        style="height: 20px; width: 150px;">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+            </button>
+            <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
+                <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                    <a class="nav-link" href="javascript:void(0)" onclick="loadHomePage(); closeOffcanvas()">Home</a>
+
+                </li>
+                <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                    <a class="nav-link" href="javascript:void(0)" onclick="fetchDetectPage(); closeOffcanvas()">Detect</a>
+                </li>
+                
+
+
+                <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                    <a class="nav-link" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Resources
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="javascript:void(0)" onclick="fetchGuidePage(); closeOffcanvas()">Disease Guide</a></li>
+                        <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
+                        <li><a class="dropdown-item" href="#">FAQ</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                    <a class="nav-link text-center" href="javascript:void(0)" onclick="fetchSignIn(); closeOffcanvas()" id="signin">Sign In</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
