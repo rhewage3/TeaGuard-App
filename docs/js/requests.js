@@ -74,6 +74,28 @@ function fetchDetectPage() {
         });
 }
 
+function fetchDashbordPage() {
+    fetch('/dashboard')  
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch the dashboard page.');
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.body.innerHTML = html;  // Load content into the body
+            console.log("🟢 Dashboard page loaded, now running loadDashboardData...");
+            
+            // Delay execution slightly to ensure DOM is fully loaded
+            setTimeout(() => {
+                loadDashboardData();
+            }, 500); 
+        })
+        .catch(error => {
+            console.error('Error loading the dashboard page:', error);
+        });
+}
+
 
 // Function to fetch the guide page dynamically when "Learn More" is clicked
 function fetchGuidePage(url) {

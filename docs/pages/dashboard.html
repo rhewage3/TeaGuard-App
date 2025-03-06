@@ -4,74 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TeaGuard Detection App - Dashboard</title>
+    <title>TeaGuard Dashboard</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link href="../assets/aos/aos.css" rel="stylesheet">
+    <link href="assets/aos/aos.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/home.css">
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="../css/main.css">
-    <!-- iOS support -->
-    <link rel="apple-touch-icon" href="../assets/images/icons/icon_96x96.png">
-    <!-- Manifest -->
-    <link rel="manifest" href="../manifest.json">
+
+    <!-- iOS Support -->
+    <link rel="apple-touch-icon" href="assets/images/icons/icon_96x96.png">
+    <link rel="manifest" href="./static/manifest.json">
 
     <style>
-        .hero-section {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('../assets/images/tea_plantation.jpg');
-            background-size: cover;
-            background-position: center;
-            color: #fff;
-            padding: 3rem 0;
-            text-align: center;
-        }
+      
+      .chart-container {
+    width: 100%;
+    max-width: 500px; /* Prevents overflow */
+    height: 300px; /* Fixes vertical expansion */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; /* Centers the chart */
+}
 
-        .hero-section h1 {
-            font-size: 3rem;
-            font-weight: 700;
-        }
+canvas {
+    max-width: 100%;
+    max-height: 300px;
+}
 
-        .hero-section p {
-            font-size: 1.25rem;
-            margin-top: 1rem;
-        }
 
-        .dashboard-section {
-            padding: 2rem 0;
-            background-color: #f5f5f5;
-        }
-
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 30vh;
-            width: 100%;
-        }
-
-        .metric-card i {
-            font-size: 2rem;
-        }
-
-        .control-buttons {
-            margin-top: 1rem;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-group-vertical .btn {
-            margin-bottom: 10px;
-        }
     </style>
+
 </head>
 
 <body>
@@ -117,183 +97,145 @@
                             <li><a class="dropdown-item" href="#">FAQ</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link text-center" href="javascript:void(0)" onclick="fetchSignIn(); closeOffcanvas()" id="signin">Sign In</a>
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4" id="user-nav">
+                        <a class="nav-link text-center" href="javascript:void(0)" onclick="fetchSignIn(); closeOffcanvas()" id="signin">
+                            Sign In
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section d-flex align-items-center justify-content-center">
-        <div class="container">
-            <h1 data-aos="fade-up">Welcome to TeaGuard Dashboard</h1>
-            <p data-aos="fade-up" data-aos-delay="200">Monitor your tea crop's health, disease status, and ripeness
-                levels with actionable insights.</p>
+    
+    <!-- Dashboard -->
+    <section class="dashboard py-5">
+        <div class="container px-4">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="fw-bold" data-aos="fade-up">Dashboard</h1>
+                    <p data-aos="fade-up" data-aos-delay="200">View your prediction history and insights.</p>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mt-4">
+                <div class="col-md-4" data-aos="fade-right">
+                    <div class="card shadow p-3">
+                        <h5>Total Predictions</h5>
+                        <h2 id="total-predictions">0</h2>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="card shadow p-3">
+                        <h5>Diseases Detected</h5>
+                        <h2 id="disease-predictions">0</h2>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-left">
+                    <div class="card shadow p-3">
+                        <h5>Ripeness Checks</h5>
+                        <h2 id="ripeness-predictions">0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+           <!-- Charts Section -->
+            <!-- Charts Section -->
+            <div class="row mt-5">
+                <!-- Disease Prediction Distribution Chart -->
+                <div class="col-md-6 d-flex justify-content-center" data-aos="zoom-in">
+                    <div class="chart-container">
+                        <h6 class="text-center">Disease Prediction Distribution</h6>
+                        <canvas id="diseaseChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Ripeness Assessment Chart -->
+                <div class="col-md-6 d-flex justify-content-center" data-aos="zoom-in">
+                    <div class="chart-container">
+                        <h6 class="text-center">Ripeness Prediction Distribution</h6>
+                        <canvas id="ripenessChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Frequent Disease Card -->
+        <div class="row mt-4">
+            <div class="col-md-6" data-aos="fade-up">
+                <div class="card shadow p-3">
+                    <h5>Most Frequent Disease Detected</h5>
+                    <h3 id="mostFrequentDisease">Loading...</h3>
+                </div>
+            </div>
+
+            <!-- Predictions Over Time Chart -->
+            <!-- <div class="col-md-6" data-aos="fade-up">
+                <h5 class="text-center">Predictions Over Time</h5>
+                <div style="width: 100%; height: 300px;">  
+                    <canvas id="predictionsOverTimeChart"></canvas>
+                </div>
+            </div> -->
+            
         </div>
-    </section>
 
-    <!-- Dashboard Section -->
-    <section class="dashboard-section" data-aos="fade-up" data-aos-duration="1000">
-        <div class="container">
-            <!-- Dashboard Header -->
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Dashboard Overview</h2>
-                <p>Key insights and data visualizations for informed decision-making</p>
-            </div>
 
-            <!-- Metric Cards -->
-            <div class="row text-center">
-                <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="card metric-card p-3">
-                        <i class="bi bi-bar-chart-line-fill text-primary mb-2"></i>
-                        <h4>Analyses Performed</h4>
-                        <p class="fs-5">125</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card metric-card p-3">
-                        <i class="bi bi-thermometer-snow text-info mb-2"></i>
-                        <h4>Healthy Leaves</h4>
-                        <p class="fs-5">85%</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="card metric-card p-3">
-                        <i class="bi bi-exclamation-triangle-fill text-warning mb-2"></i>
-                        <h4>Diseased Leaves</h4>
-                        <p class="fs-5">15%</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="400">
-                    <div class="card metric-card p-3">
-                        <i class="bi bi-hourglass-split text-success mb-2"></i>
-                        <h4>Time Saved</h4>
-                        <p class="fs-5">30 hrs</p>
-                    </div>
+
+
+            <!-- Prediction History Table -->
+            <div class="row mt-5">
+                <div class="col-md-12" data-aos="fade-up">
+                    <h3 class="fw-bold">Prediction History</h3>
+                    <table class="table table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Result</th>
+                                <th>Confidence</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTable">
+                            <tr>
+                                <td colspan="4" class="text-center">No history found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-success mt-3" onclick="generateReport()" data-aos="fade-up">
+                        <i class="bi bi-file-earmark-text"></i> Generate Report
+                    </button>
                 </div>
             </div>
 
-            <!-- Control Buttons -->
-            <div class="control-buttons">
-                <button class="btn btn-primary">View Report</button>
-                <button class="btn btn-outline-primary">Export Data</button>
-                <button class="btn btn-outline-secondary">Download PDF</button>
-            </div>
-
-            <!-- Chart Section -->
-            <div class="row mt-5 text-center">
-                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="card p-3">
-                        <h4>Leaf Health Overview</h4>
-                        <div class="chart-container">
-                            <canvas id="healthChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card p-3">
-                        <h4>Ripeness Distribution</h4>
-                        <div class="chart-container">
-                            <canvas id="ripenessChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="card p-3">
-                        <h4>Disease Detection Over Time</h4>
-                        <div class="chart-container">
-                            <canvas id="diseaseTrendChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
     <!-- Footer -->
-     <footer class="footer  text-light py-4 d-felx justify-content-center align-items-center">
-    <div class="container">
-        <div class="text-center">
+    <footer class="footer text-light py-4 text-center mt-5">
+        <div class="container">
             <p class="mb-0">&copy; 2023 TeaGuard. All rights reserved.</p>
         </div>
-    </div>
-</footer>
+    </footer>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap Bundle with Popper -->
+
+    <!-- Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AOS Animation -->
+    <script src="assets/aos/aos.js"></script>
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- AOS Animation -->
-    <script src="../assets/aos/aos.js"></script>
-    <script>
-        AOS.init();
 
-        // Chart configurations
-        const healthCtx = document.getElementById('healthChart').getContext('2d');
-        new Chart(healthCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Healthy Leaves', 'Diseased Leaves'],
-                datasets: [{
-                    data: [85, 15],
-                    backgroundColor: ['#4CAF50', '#FF6347'],
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'bottom' }
-                }
-            }
-        });
 
-        const ripenessCtx = document.getElementById('ripenessChart').getContext('2d');
-        new Chart(ripenessCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Underripe', 'Ripe', 'Overripe'],
-                datasets: [{
-                    data: [20, 60, 20],
-                    backgroundColor: ['#FFDD57', '#4CAF50', '#FF4500'],
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'bottom' }
-                }
-            }
-        });
+    <!-- JS Files -->
+    <script src="js/requests.js"></script>
+    <script src="js/functions.js"></script>
 
-        const diseaseTrendCtx = document.getElementById('diseaseTrendChart').getContext('2d');
-        new Chart(diseaseTrendCtx, {
-            type: 'line',
-            data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
-                datasets: [{
-                    label: 'Diseased Leaves Detected',
-                    data: [5, 8, 6, 12, 9],
-                    borderColor: '#FF6347',
-                    backgroundColor: 'rgba(255, 99, 71, 0.3)',
-                    fill: true,
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'top' }
-                },
-                scales: {
-                    x: { title: { display: true, text: 'Time (Weeks)' } },
-                    y: { title: { display: true, text: 'Number of Diseased Leaves' } }
-                }
-            }
-        });
-    </script>
+   
 </body>
 
 </html>

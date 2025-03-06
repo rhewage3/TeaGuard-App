@@ -416,3 +416,130 @@ function clearResults() {
     document.getElementById("scanButton").style.display = "none";
     document.getElementById("result-card").style.display = "none";
 }
+
+
+
+async function loadDashboardData() {
+    try {
+        console.log("🔄 Fetching user predictions...");
+
+        const response = await fetch("/user-predictions");
+        if (!response.ok) throw new Error("Failed to fetch user predictions.");
+
+        const data = await response.json();
+        console.log("✅ API Response:", data);
+
+        // Ensure the DOM is fully loaded before modifying elements
+        setTimeout(() => {
+            const totalPred = document.getElementById("total-predictions");
+            const diseasePred = document.getElementById("disease-predictions");
+            const ripenessPred = document.getElementById("ripeness-predictions");
+            const historyTable = document.getElementById("historyTable");
+
+            if (!totalPred || !diseasePred || !ripenessPred || !historyTable) {
+                console.error("🚨 Missing elements in the DOM! Check your HTML IDs.");
+                return;
+            }
+
+            // ✅ Update UI Elements
+            totalPred.innerText = data.total;
+            diseasePred.innerText = data.disease_count;
+            ripenessPred.innerText = data.ripeness_count;
+
+            console.log("🟢 Updated Counts:", data.total, data.disease_count, data.ripeness_count);
+
+            // ✅ Update History Table
+            historyTable.innerHTML = "";  // Clear old rows
+            if (data.predictions.length > 0) {
+                data.predictions.forEach(prediction => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${prediction.type.charAt(0).toUpperCase() + prediction.type.slice(1)}</td>
+                        <td>${prediction.result}</td>
+                        <td>${prediction.confidence}</td>
+                        <td>${prediction.date}</td>
+                    `;
+                    historyTable.appendChild(row);
+                });
+                console.log("🟢 Updated History Table");
+            } else {
+                historyTable.innerHTML = `<tr><td colspan="4" class="text-center">No history found.</td></tr>`;
+            }
+
+            // ✅ Generate Charts (ONLY ONCE)
+            if (!window.chartsInitialized) {
+                generateCharts(data.disease_distribution, data.ripeness_distribution);
+                window.chartsInitialized = true; // Prevent multiple chart creations
+            }
+
+        }, 500);
+
+    } catch (error) {
+        console.error("🚨 Error in Dashboard Data:", error);
+    }
+}
+
+// ✅ Call function when the page is fully loaded
+document.addEventListener("DOMContentLoaded", loadDashboardData);
+
+function generateCharts(diseaseData, ripenessData) {
+    console.log("📊 Generating Charts - Disease:", diseaseData, "Ripeness:", ripenessData);
+
+    const diseaseCanvas = document.getElementById("diseaseChart");
+    const ripenessCanvas = document.getElementById("ripenessChart");
+
+    if (!diseaseCanvas || !ripenessCanvas) {
+        console.error("🚨 Chart.js Canvas Elements Not Found!");
+        return;
+    }
+
+    // ✅ Prevent Infinite Loop: Destroy Previous Chart Instances
+    if (window.diseaseChartInstance) {
+        window.diseaseChartInstance.destroy();
+        console.log("🔄 Destroyed Previous Disease Chart");
+    }
+    if (window.ripenessChartInstance) {
+        window.ripenessChartInstance.destroy();
+        console.log("🔄 Destroyed Previous Ripeness Chart");
+    }
+
+    // ✅ Fix Chart Canvas Height & Width to Prevent Infinite Growth
+    diseaseCanvas.style.width = "100%";
+    diseaseCanvas.style.height = "300px";  
+    ripenessCanvas.style.width = "100%";
+    ripenessCanvas.style.height = "300px"; 
+
+    // ✅ Create Disease Chart (No Duplicates)
+    window.diseaseChartInstance = new Chart(diseaseCanvas.getContext("2d"), {
+        type: "pie",
+        data: {
+            labels: Object.keys(diseaseData),
+            datasets: [{
+                data: Object.values(diseaseData),
+                backgroundColor: ["#ff5733", "#33c4ff", "#ffcc33", "#00cc99", "#9933ff", "#ff3399"]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // ✅ Create Ripeness Chart (No Duplicates)
+    window.ripenessChartInstance = new Chart(ripenessCanvas.getContext("2d"), {
+        type: "pie",
+        data: {
+            labels: Object.keys(ripenessData),
+            datasets: [{
+                data: Object.values(ripenessData),
+                backgroundColor: ["#33c4ff", "#ff5733"]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    console.log("✅ Charts Rendered Successfully Without Duplication");
+}

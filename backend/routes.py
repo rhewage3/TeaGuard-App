@@ -7,7 +7,10 @@ from db_models import User
 from schemas import UserCreate
 from utils import hash_password, verify_password
 from starlette.middleware.sessions import SessionMiddleware
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm  
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm 
+from db_models import Prediction 
+from collections import Counter
+from sqlalchemy.sql import func
 
 
 
@@ -78,4 +81,42 @@ async def session_info(request: Request):
     return {
         "user_id": request.session.get("user_id"),
         "username": request.session.get("username")
+    }
+
+
+
+
+# Fetch all predictions for the logged-in user
+@router.get("/user-predictions")
+async def get_user_predictions(request: Request, db: AsyncSession = Depends(get_db)):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="User not logged in")
+
+    result = await db.execute(select(Prediction).filter(Prediction.user_id == user_id))
+    predictions = result.scalars().all()
+
+    disease_distribution = {}
+    ripeness_distribution = {}
+
+    for pred in predictions:
+        if pred.prediction_type == "disease":
+            disease_distribution[pred.prediction_result] = disease_distribution.get(pred.prediction_result, 0) + 1
+        elif pred.prediction_type == "ripeness":
+            ripeness_distribution[pred.prediction_result] = ripeness_distribution.get(pred.prediction_result, 0) + 1
+
+    return {
+        "total": len(predictions),
+        "disease_count": sum(disease_distribution.values()),
+        "ripeness_count": sum(ripeness_distribution.values()),
+        "disease_distribution": disease_distribution,
+        "ripeness_distribution": ripeness_distribution,
+        "predictions": [
+            {
+                "type": pred.prediction_type,
+                "result": pred.prediction_result,
+                "confidence": f"{pred.confidence * 100:.2f}%",
+                "date": pred.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+            } for pred in predictions
+        ]
     }

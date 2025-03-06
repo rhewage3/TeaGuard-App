@@ -132,6 +132,23 @@ async def logIn():
     except Exception as e:
         print(f"Error: {e}")
         return HTMLResponse(content=f"Internal Server Error: {str(e)}", status_code=500)
+    
+
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard():
+    try:
+        upload_path = FRONTEND_DIR / "pages" / "dashboard.html"
+        print(f"Checking path: {upload_path}")  # Debugging output
+
+        if upload_path.exists():
+            return FileResponse(upload_path)  # Serve file directly
+        else:
+            print("File not found!")
+            return HTMLResponse(content="Sign-in Page not found", status_code=404)
+    except Exception as e:
+        print(f"Error: {e}")
+        return HTMLResponse(content=f"Internal Server Error: {str(e)}", status_code=500)
 
 
 
