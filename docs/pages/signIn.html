@@ -88,9 +88,10 @@
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
                         <a class="nav-link" href="#">Dashboard</a>
                     </li>
-                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link text-center" href="javascript:void(0)"
-                            onclick="fetchSignIn(); closeOffcanvas()" id="signin">Sign In</a>
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4" id="user-nav">
+                        <a class="nav-link text-center" href="javascript:void(0)" onclick="fetchSignIn(); closeOffcanvas()" id="signin">
+                            Sign In
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -116,7 +117,7 @@
                     </div>
                     <div class="row mt-3 d-flex flex-column justify-content-center align-items-center">
                         <div class="col-md-8">
-                            <form id="register-form">
+                            <form id="register-form" onsubmit="SignInUser(event)">
                                 <div class="mb-3">
                                     <label for="username" class="form-label">Username</label>
                                     <input type="text" class="form-control" id="username"

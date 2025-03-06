@@ -11,67 +11,165 @@ function closeOffcanvas() {
     }
 }
 
-///after user logged in cahngin the nav bar
-function updateNavbar() {
-  console.log(" Updating Navbar...");
-  
-  // Check if user is logged in
-  const username = localStorage.getItem("username");
+async function checkSession() {
+  try {
+      const response = await fetch("/session-info");
+      const data = await response.json();
 
-  if (username) {
-      console.log(" User logged in, updating navbar...");
-      
-      // Get the Sign In button
-      const signInElement = document.getElementById("signin");
-
-      if (signInElement) {
-          // Change Sign In to User Profile
-          signInElement.innerHTML = `<i class="bi bi-person-circle"></i> ${username}`;
-          signInElement.href = "javascript:void(0)"; // Prevent navigation
+      if (data.logged_in) {
+          updateNavbar(data.username);
+      } else {
+          updateNavbar(null);
       }
-  } else {
-      console.log(" No user found, showing Sign In button");
+  } catch (error) {
+      console.error("Error checking session:", error);
   }
 }
 
-// Run on page load
+//  Update Navbar Based on Session
+async function updateNavbar() {
+  console.log("Updating Navbar...");
+
+  try {
+      const response = await fetch("/session-info", { credentials: "include" });
+      if (!response.ok) throw new Error("Failed to fetch session data");
+
+      const data = await response.json();
+      console.log("Session Data:", data);
+
+      // Get elements
+      const signInElement = document.getElementById("signin");
+      const userNavElement = document.getElementById("user-nav");
+
+      if (!signInElement || !userNavElement) {
+          console.warn("Navbar elements not found. Skipping update.");
+          return; // Exit if navbar elements don't exist
+      }
+
+      if (data.username) {
+          console.log("User logged in, updating navbar...");
+
+          // Replace Sign In button with username dropdown
+          userNavElement.innerHTML = `
+              <div class="dropdown">
+                  <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                      ${data.username}
+                  </button>
+                  <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="dashboard.html">Dashboard</a></li>
+                      <li><a class="dropdown-item" href="javascript:void(0)" onclick="logout()">Logout</a></li>
+                  </ul>
+              </div>
+          `;
+      } else {
+          console.log("No user found, showing Sign In button");
+
+          // Ensure Sign In button is displayed properly
+          signInElement.innerHTML = "Sign In";
+          signInElement.href = "javascript:void(0)";
+          signInElement.onclick = () => fetchSignIn(); // Ensure it opens the login page
+      }
+  } catch (error) {
+      console.error("Error fetching session info:", error);
+  }
+}
+
+// Run `updateNavbar()` on every page load
 document.addEventListener("DOMContentLoaded", updateNavbar);
 
 
-// Logout function
-function logout() {
-  localStorage.removeItem("username");
-  window.location.reload();  // Refresh the page
+//  Logout Function (Removes Session)
+async function logout() {
+  try {
+      await fetch("/logout", { method: "POST" });
+      checkSession(); // Refresh navbar
+  } catch (error) {
+      console.error("Logout error:", error);
+  }
 }
+
+//  Run on Page Load
+document.addEventListener("DOMContentLoaded", checkSession);
+
 
 
 async function loginUser(event) {
-  event.preventDefault(); // Prevent default form submission
-  console.log(" Login button clicked! Function triggered.");  // Debugging
+  event.preventDefault();
+  console.log("Login button clicked!");
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const formData = new URLSearchParams();  
+  const formData = new URLSearchParams();
   formData.append("username", email);
   formData.append("password", password);
 
-  const response = await fetch("/login", {  
+  const response = await fetch("/login", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData
   });
 
   if (response.ok) {
-      console.log(" Login successful!");
-      const data = await response.json();  
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("username", email);
-      updateNavbar();
+      console.log("Login successful!");
+      checkSession(); // Refresh navbar
       window.location.href = "/";
   } else {
-      console.log(" Login failed. Check credentials.");
+      console.log("Login failed.");
       alert("Login failed. Please check your credentials.");
+  }
+}
+
+
+
+async function SignInUser(event) {
+  event.preventDefault(); // Prevent default form submission
+
+  console.log("Sign-in button clicked! Function triggered.");
+
+  // Get form values
+  const username = document.getElementById("username").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+  // Validate password match
+  if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+  }
+
+  // Construct request payload
+  const requestData = {
+      username: username,
+      email: email,
+      password: password
+  };
+
+  try {
+      // Send registration request
+      const response = await fetch("/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestData)
+      });
+
+      // Handle response
+      if (response.ok) {
+          const data = await response.json();
+          console.log("Registration successful!", data);
+
+          // Show success message & redirect to login page
+          alert("Registration successful! Please log in.");
+          fetchLogIn(); // Navigate to login page
+      } else {
+          const errorData = await response.json();
+          console.error("Registration failed:", errorData);
+          alert("Registration failed: " + errorData.detail);
+      }
+  } catch (error) {
+      console.error("Error registering user:", error);
+      alert("An unexpected error occurred. Please try again.");
   }
 }
 

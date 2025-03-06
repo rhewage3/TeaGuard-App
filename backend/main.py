@@ -1,6 +1,8 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Depends, Request
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware 
+from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from tensorflow.keras.models import load_model
 from tensorflow.keras.applications.efficientnet import preprocess_input
@@ -8,14 +10,21 @@ from PIL import Image
 import numpy as np
 import io
 import uvicorn
+
 from routes import router  # Import the router from routes.py
+from db_models import Prediction
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from database import async_session, get_db
+
+
 
 
 # Initialize FastAPI app
 app = FastAPI()
 
 
-from fastapi.middleware.cors import CORSMiddleware
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,8 +34,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+#  Enable Session Middleware
+app.add_middleware(SessionMiddleware, secret_key="your_secret_key_here")  # Starlette session support
+
+
 # Include Routes for Authentication
 app.include_router(router)
+
+
+
+app.add_middleware(SessionMiddleware, secret_key="your_secret_key_here")  # Enables session storage
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, 
@@ -135,37 +153,44 @@ CLASS_LABLES_DISEASE = ['algal_spot',"brown_blight","gray_blight","healthy","hel
 
 
 @app.post('/predict-disease')
-async def predict_disease(file: UploadFile = File(...)):
+async def predict_disease(
+    request: Request,
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db)
+):
     try:
-        # Read image from the uploaded file
+        #  Extract user ID from session
+        user_id = request.session.get("user_id", None)
+
+        #  Read & Preprocess Image
         content = await file.read()
-        image = Image.open(io.BytesIO(content)).convert("RGB")  
-
-        # Resize the image to match model input 
+        image = Image.open(io.BytesIO(content)).convert("RGB")
         image = image.resize((300, 300))
+        image_array = preprocess_input(np.expand_dims(np.array(image), axis=0))
 
-        # Convert image to numpy array and preprocess
-        image_array = np.array(image)
-        image_array = preprocess_input(image_array)  
-        image_array = np.expand_dims(image_array, axis=0)  
-
-        # Predict the class
+        #  Run Prediction
         predictions = disease_model.predict(image_array)
         predicted_class_index = np.argmax(predictions, axis=1)[0]
         confidence = float(np.max(predictions))
-
-        # Get the corresponding class label
         predicted_label = CLASS_LABLES_DISEASE[predicted_class_index]
 
-        return JSONResponse(content={
-            "class": predicted_label,
-            "confidence": f"{confidence * 100:.2f}%"
-        })
+        #  Save Prediction Result in Database
+        new_prediction = Prediction(
+            user_id=user_id,  # Store user ID if logged in, else NULL
+            image_filename=file.filename,
+            prediction_type="disease",
+            prediction_result=predicted_label,
+            confidence=confidence
+        )
+        db.add(new_prediction)
+        await db.commit()
+        await db.refresh(new_prediction)
+
+        return {"class": predicted_label, "confidence": f"{confidence * 100:.2f}%"}
 
     except Exception as e:
+        print(f" DATABASE ERROR: {e}")  # Show actual error
         return JSONResponse(content={"error": str(e)}, status_code=500)
-
-
 
 
 
@@ -176,7 +201,7 @@ RIPE_MODEL_PATH = r"R:\IIT\FYP\PROJECT\backend\model\Ripe_model.keras"
 #  Load the model
 try:
     ripe_model = load_model(RIPE_MODEL_PATH)
-    print("✅ RIPE MODEL LOADED SUCCESSFULLY")
+    print(" RIPE MODEL LOADED SUCCESSFULLY")
 except Exception as e:
     print(f" ERROR LOADING RIPE MODEL: {e}")
 
@@ -194,27 +219,39 @@ def preprocess_image(image_bytes):
 
 #  Define API endpoint for ripeness prediction
 @app.post('/predict-ripeness')
-async def predict_ripe(file: UploadFile = File(...)):
+async def predict_ripeness(
+    request: Request,
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db)
+):
     try:
-        # Read image file
+        #  Extract user ID from session
+        user_id = request.session.get("user_id", None)
+
+        #  Read & Preprocess Image
         image_bytes = await file.read()
-        
-        # Preprocess the image
         processed_image = preprocess_image(image_bytes)
-        
-        # Make a prediction
+
+        #  Run Prediction
         predictions = ripe_model.predict(processed_image)
         predicted_index = np.argmax(predictions)
         confidence = np.max(predictions)
-
-        # Get predicted label
         predicted_label = CLASS_LABELS_RIPE[predicted_index]
 
-        # Return response
-        return JSONResponse(content={
-            "class": predicted_label,
-            "confidence": f"{confidence * 100:.2f}%"
-        })
-    
+        #  Save Prediction Result in Database
+        new_prediction = Prediction(
+            user_id=user_id,
+            image_filename=file.filename,
+            prediction_type="ripeness",
+            prediction_result=predicted_label,
+            confidence=confidence
+        )
+        db.add(new_prediction)
+        await db.commit()
+        await db.refresh(new_prediction)
+
+        return {"class": predicted_label, "confidence": f"{confidence * 100:.2f}%"}
+
     except Exception as e:
+        print(f" DATABASE ERROR: {e}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
