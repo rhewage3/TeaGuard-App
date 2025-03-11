@@ -11,6 +11,8 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from db_models import Prediction 
 from collections import Counter
 from sqlalchemy.sql import func
+from datetime import datetime, timedelta  
+
 
 
 
@@ -94,6 +96,60 @@ async def get_user_predictions(request: Request, db: AsyncSession = Depends(get_
         raise HTTPException(status_code=401, detail="User not logged in")
 
     result = await db.execute(select(Prediction).filter(Prediction.user_id == user_id))
+    predictions = result.scalars().all()
+
+    disease_distribution = {}
+    ripeness_distribution = {}
+
+    for pred in predictions:
+        if pred.prediction_type == "disease":
+            disease_distribution[pred.prediction_result] = disease_distribution.get(pred.prediction_result, 0) + 1
+        elif pred.prediction_type == "ripeness":
+            ripeness_distribution[pred.prediction_result] = ripeness_distribution.get(pred.prediction_result, 0) + 1
+
+    return {
+        "total": len(predictions),
+        "disease_count": sum(disease_distribution.values()),
+        "ripeness_count": sum(ripeness_distribution.values()),
+        "disease_distribution": disease_distribution,
+        "ripeness_distribution": ripeness_distribution,
+        "predictions": [
+            {
+                "type": pred.prediction_type,
+                "result": pred.prediction_result,
+                "confidence": f"{pred.confidence * 100:.2f}%",
+                "date": pred.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+            } for pred in predictions
+        ]
+    }
+
+
+
+# Helper function to filter predictions by time range
+def filter_by_time(query, time_filter):
+    now = datetime.utcnow()
+
+    if time_filter == "today":
+        query = query.filter(Prediction.timestamp >= now.replace(hour=0, minute=0, second=0))
+    elif time_filter == "week":
+        week_start = now - timedelta(days=now.weekday())  # Start of the week (Monday)
+        query = query.filter(Prediction.timestamp >= week_start)
+    elif time_filter == "month":
+        query = query.filter(Prediction.timestamp >= now.replace(day=1))
+    
+    return query
+
+#  NEW ROUTE: Fetch filtered report data
+@router.get("/user-report")
+async def get_user_report(request: Request, time_filter: str = "all", db: AsyncSession = Depends(get_db)):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="User not logged in")
+
+    query = select(Prediction).filter(Prediction.user_id == user_id)
+    query = filter_by_time(query, time_filter)
+
+    result = await db.execute(query)
     predictions = result.scalars().all()
 
     disease_distribution = {}

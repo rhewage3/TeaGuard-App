@@ -33,23 +33,23 @@
     <link rel="manifest" href="./static/manifest.json">
 
     <style>
-      
-      .chart-container {
-    width: 100%;
-    max-width: 500px; /* Prevents overflow */
-    height: 300px; /* Fixes vertical expansion */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto; /* Centers the chart */
-}
+        .chart-container {
+            width: 100%;
+            max-width: 500px;
+            /* Prevents overflow */
+            height: 300px;
+            /* Fixes vertical expansion */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            /* Centers the chart */
+        }
 
-canvas {
-    max-width: 100%;
-    max-height: 300px;
-}
-
-
+        canvas {
+            max-width: 100%;
+            max-height: 300px;
+        }
     </style>
 
 </head>
@@ -58,7 +58,8 @@ canvas {
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg py-4 py-lg-0 shadow">
         <div class="container px-4">
-            <a href="javascript:void(0)" onclick="loadHomePage()"><img src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
+            <a href="javascript:void(0)" onclick="loadHomePage()"><img
+                    src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#top-navbar" aria-controls="top-navbar">
                 <i class="bi bi-list"></i>
@@ -74,15 +75,17 @@ canvas {
                 </button>
                 <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javascript:void(0)" onclick="loadHomePage(); closeOffcanvas()">Home</a>
-    
+                        <a class="nav-link" href="javascript:void(0)"
+                            onclick="loadHomePage(); closeOffcanvas()">Home</a>
+
                     </li>
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javascript:void(0)" onclick="fetchDetectPage(); closeOffcanvas()">Detect</a>
+                        <a class="nav-link" href="javascript:void(0)"
+                            onclick="fetchDetectPage(); closeOffcanvas()">Detect</a>
                     </li>
-                    
-    
-    
+
+
+
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
                         <a class="nav-link" href="#">Dashboard</a>
                     </li>
@@ -92,13 +95,15 @@ canvas {
                             Resources
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="fetchGuidePage(); closeOffcanvas()">Disease Guide</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                    onclick="fetchGuidePage(); closeOffcanvas()">Disease Guide</a></li>
                             <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
                             <li><a class="dropdown-item" href="#">FAQ</a></li>
                         </ul>
                     </li>
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4" id="user-nav">
-                        <a class="nav-link text-center" href="javascript:void(0)" onclick="fetchSignIn(); closeOffcanvas()" id="signin">
+                        <a class="nav-link text-center" href="javascript:void(0)"
+                            onclick="fetchSignIn(); closeOffcanvas()" id="signin">
                             Sign In
                         </a>
                     </li>
@@ -107,7 +112,7 @@ canvas {
         </div>
     </nav>
 
-    
+
     <!-- Dashboard -->
     <section class="dashboard py-5">
         <div class="container px-4">
@@ -141,7 +146,7 @@ canvas {
             </div>
 
             <!-- Charts -->
-           <!-- Charts Section -->
+            <!-- Charts Section -->
             <!-- Charts Section -->
             <div class="row mt-5">
                 <!-- Disease Prediction Distribution Chart -->
@@ -162,23 +167,23 @@ canvas {
             </div>
 
             <!-- Most Frequent Disease Card -->
-        <div class="row mt-4">
-            <div class="col-md-6" data-aos="fade-up">
-                <div class="card shadow p-3">
-                    <h5>Most Frequent Disease Detected</h5>
-                    <h3 id="mostFrequentDisease">Loading...</h3>
+            <div class="row mt-4">
+                <div class="col-md-6" data-aos="fade-up">
+                    <div class="card shadow p-3">
+                        <h5>Most Frequent Disease Detected</h5>
+                        <h3 id="mostFrequentDisease">Loading...</h3>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Predictions Over Time Chart -->
-            <!-- <div class="col-md-6" data-aos="fade-up">
+                <!-- Predictions Over Time Chart -->
+                <!-- <div class="col-md-6" data-aos="fade-up">
                 <h5 class="text-center">Predictions Over Time</h5>
                 <div style="width: 100%; height: 300px;">  
                     <canvas id="predictionsOverTimeChart"></canvas>
                 </div>
             </div> -->
-            
-        </div>
+
+            </div>
 
 
 
@@ -202,9 +207,77 @@ canvas {
                             </tr>
                         </tbody>
                     </table>
-                    <button class="btn btn-success mt-3" onclick="generateReport()" data-aos="fade-up">
+                    <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#reportModal" data-aos="fade-up">
                         <i class="bi bi-file-earmark-text"></i> Generate Report
                     </button>
+                </div>
+            </div>
+
+
+            <!-- Bootstrap Modal for Report Selection -->
+            <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="reportModalLabel">Generate Report</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Report Filters -->
+                            <h6>Select Time Range:</h6>
+                            <select class="form-select mb-3" id="reportTimeRange">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="all" selected>All Time</option>
+                            </select>
+
+                            <!-- Generate Report Button -->
+                            <button class="btn btn-primary" onclick="generateReport()">
+                                <i class="bi bi-bar-chart"></i> Generate Report
+                            </button>
+
+                            <!-- Report Display -->
+                            <div id="reportContent" class="mt-4" style="display: none;">
+                                <h5 class="text-center fw-bold">TeaGuard Prediction Report</h5>
+                                <p class="text-center" id="reportDateRange"></p>
+                                <hr>
+
+                                <!-- Report Summary -->
+                                <div class="row">
+                                    <div class="col-md-4"><strong>Total Predictions:</strong> <span
+                                            id="reportTotal"></span></div>
+                                    <div class="col-md-4"><strong>Disease Detections:</strong> <span
+                                            id="reportDisease"></span></div>
+                                    <div class="col-md-4"><strong>Ripeness Checks:</strong> <span
+                                            id="reportRipeness"></span></div>
+                                </div>
+
+                                <!-- Report Table -->
+                                <table class="table table-striped mt-3">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Result</th>
+                                            <th>Confidence</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reportTable">
+                                        <tr>
+                                            <td colspan="4" class="text-center">No data available.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Print Report Button -->
+                                <button class="btn btn-danger mt-3" onclick="printReport()">
+                                    <i class="bi bi-printer"></i> Print Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -235,7 +308,7 @@ canvas {
     <script src="js/requests.js"></script>
     <script src="js/functions.js"></script>
 
-   
+
 </body>
 
 </html>

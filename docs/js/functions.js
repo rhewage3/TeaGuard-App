@@ -543,3 +543,58 @@ function generateCharts(diseaseData, ripenessData) {
 
     console.log("✅ Charts Rendered Successfully Without Duplication");
 }
+
+
+
+async function generateReport() {
+    const timeFilter = document.getElementById("reportTimeRange").value;
+    console.log("📄 Generating report for:", timeFilter);
+
+    try {
+        // 📌 NEW API CALL for fetching report data
+        const response = await fetch(`/user-report?time_filter=${timeFilter}`);
+        if (!response.ok) throw new Error("Failed to fetch report data.");
+
+        const data = await response.json();
+
+        // Update Report UI
+        document.getElementById("reportTotal").innerText = data.total;
+        document.getElementById("reportDisease").innerText = data.disease_count;
+        document.getElementById("reportRipeness").innerText = data.ripeness_count;
+        document.getElementById("reportDateRange").innerText = `Showing results for: ${timeFilter.toUpperCase()}`;
+
+        // Populate Report Table
+        const reportTable = document.getElementById("reportTable");
+        reportTable.innerHTML = "";
+
+        if (data.predictions.length > 0) {
+            data.predictions.forEach(prediction => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${prediction.type.charAt(0).toUpperCase() + prediction.type.slice(1)}</td>
+                    <td>${prediction.result}</td>
+                    <td>${prediction.confidence}</td>
+                    <td>${prediction.date}</td>
+                `;
+                reportTable.appendChild(row);
+            });
+        } else {
+            reportTable.innerHTML = `<tr><td colspan="4" class="text-center">No data available.</td></tr>`;
+        }
+
+        // Show Report
+        document.getElementById("reportContent").style.display = "block";
+    } catch (error) {
+        console.error("🚨 Error fetching report:", error);
+    }
+}
+
+// Print Report Function
+function printReport() {
+    const printContent = document.getElementById("reportContent").innerHTML;
+    const originalBody = document.body.innerHTML;
+
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalBody;
+}
