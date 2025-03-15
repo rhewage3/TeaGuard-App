@@ -123,56 +123,70 @@ async def get_user_predictions(request: Request, db: AsyncSession = Depends(get_
         ]
     }
 
-
-
-# Helper function to filter predictions by time range
+# Helper function to filter data based on time period
 def filter_by_time(query, time_filter):
     now = datetime.utcnow()
-
     if time_filter == "today":
-        query = query.filter(Prediction.timestamp >= now.replace(hour=0, minute=0, second=0))
-    elif time_filter == "week":
-        week_start = now - timedelta(days=now.weekday())  # Start of the week (Monday)
-        query = query.filter(Prediction.timestamp >= week_start)
-    elif time_filter == "month":
-        query = query.filter(Prediction.timestamp >= now.replace(day=1))
-    
-    return query
+        return query.filter(Prediction.timestamp >= now - timedelta(days=1))
+    elif time_filter == "this_week":
+        return query.filter(Prediction.timestamp >= now - timedelta(weeks=1))
+    elif time_filter == "this_month":
+        return query.filter(Prediction.timestamp >= now.replace(day=1))
+    return query  # Default is all-time data
 
-#  NEW ROUTE: Fetch filtered report data
+
+
+
+#api for user report details
 @router.get("/user-report")
 async def get_user_report(request: Request, time_filter: str = "all", db: AsyncSession = Depends(get_db)):
     user_id = request.session.get("user_id")
     if not user_id:
         raise HTTPException(status_code=401, detail="User not logged in")
 
+    # Get filtered predictions
     query = select(Prediction).filter(Prediction.user_id == user_id)
     query = filter_by_time(query, time_filter)
-
     result = await db.execute(query)
     predictions = result.scalars().all()
 
-    disease_distribution = {}
-    ripeness_distribution = {}
+    if not predictions:
+        return {"message": "No predictions available for this period"}
 
-    for pred in predictions:
-        if pred.prediction_type == "disease":
-            disease_distribution[pred.prediction_result] = disease_distribution.get(pred.prediction_result, 0) + 1
-        elif pred.prediction_type == "ripeness":
-            ripeness_distribution[pred.prediction_result] = ripeness_distribution.get(pred.prediction_result, 0) + 1
+    # Count disease occurrences (excluding 'healthy')
+    disease_counts = Counter(pred.prediction_result for pred in predictions if pred.prediction_type == "disease" and pred.prediction_result != "healthy")
+    ripeness_counts = Counter(pred.prediction_result for pred in predictions if pred.prediction_type == "ripeness")
+
+    # Determine most common disease (excluding "healthy")
+    most_common_disease = disease_counts.most_common(1)[0] if disease_counts else ("None", 0)
+
+    # Severity Analysis
+    high_confidence = sum(1 for pred in predictions if pred.confidence > 0.75)
+    low_confidence = sum(1 for pred in predictions if pred.confidence <= 0.75)
+
+    # Month-to-month comparison
+    last_month = datetime.utcnow().replace(day=1) - timedelta(days=1)
+    last_month_query = select(Prediction).filter(
+        Prediction.user_id == user_id, Prediction.timestamp >= last_month.replace(day=1), Prediction.timestamp < last_month
+    )
+    last_month_result = await db.execute(last_month_query)
+    last_month_predictions = last_month_result.scalars().all()
+    last_month_count = len(last_month_predictions)
+    current_count = len(predictions)
+
+    trend = f"+{current_count - last_month_count} increase" if current_count > last_month_count else f"{last_month_count - current_count} decrease"
+    disease_trend = "Increase in disease cases" if disease_counts else "Stable disease count"
+    ripeness_trend = "More overripe detections" if ripeness_counts.get("Overripe", 0) > ripeness_counts.get("Ripe", 0) else "Healthy ripeness balance"
 
     return {
-        "total": len(predictions),
-        "disease_count": sum(disease_distribution.values()),
-        "ripeness_count": sum(ripeness_distribution.values()),
-        "disease_distribution": disease_distribution,
-        "ripeness_distribution": ripeness_distribution,
-        "predictions": [
-            {
-                "type": pred.prediction_type,
-                "result": pred.prediction_result,
-                "confidence": f"{pred.confidence * 100:.2f}%",
-                "date": pred.timestamp.strftime("%Y-%m-%d %H:%M:%S")
-            } for pred in predictions
-        ]
+        "total_predictions": len(predictions),
+        "disease_count": sum(disease_counts.values()),
+        "ripeness_count": sum(ripeness_counts.values()),
+        "most_common_disease": most_common_disease[0],
+        "most_common_disease_count": most_common_disease[1],
+        "high_confidence": high_confidence,
+        "low_confidence": low_confidence,
+        "trend": trend,
+        "disease_trend": disease_trend,
+        "ripeness_trend": ripeness_trend
     }

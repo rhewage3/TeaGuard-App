@@ -543,58 +543,131 @@ function generateCharts(diseaseData, ripenessData) {
 
     console.log("✅ Charts Rendered Successfully Without Duplication");
 }
-
-
-
 async function generateReport() {
-    const timeFilter = document.getElementById("reportTimeRange").value;
-    console.log("📄 Generating report for:", timeFilter);
-
     try {
-        // 📌 NEW API CALL for fetching report data
+        console.log("📄 Fetching report data...");
+
+        const timeFilter = document.getElementById("reportFilter").value; // Get selected time filter
         const response = await fetch(`/user-report?time_filter=${timeFilter}`);
         if (!response.ok) throw new Error("Failed to fetch report data.");
 
         const data = await response.json();
+        console.log("✅ Report Data:", data);
 
-        // Update Report UI
-        document.getElementById("reportTotal").innerText = data.total;
-        document.getElementById("reportDisease").innerText = data.disease_count;
-        document.getElementById("reportRipeness").innerText = data.ripeness_count;
-        document.getElementById("reportDateRange").innerText = `Showing results for: ${timeFilter.toUpperCase()}`;
-
-        // Populate Report Table
-        const reportTable = document.getElementById("reportTable");
-        reportTable.innerHTML = "";
-
-        if (data.predictions.length > 0) {
-            data.predictions.forEach(prediction => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${prediction.type.charAt(0).toUpperCase() + prediction.type.slice(1)}</td>
-                    <td>${prediction.result}</td>
-                    <td>${prediction.confidence}</td>
-                    <td>${prediction.date}</td>
-                `;
-                reportTable.appendChild(row);
-            });
-        } else {
-            reportTable.innerHTML = `<tr><td colspan="4" class="text-center">No data available.</td></tr>`;
+        if (data.message) {
+            document.getElementById("reportContent").innerHTML = `<p>${data.message}</p>`;
+            return;
         }
 
-        // Show Report
-        document.getElementById("reportContent").style.display = "block";
+        // Generate Styled Report Content
+        document.getElementById("reportContent").innerHTML = `
+            <div class="report-container p-3">
+                
+                <!-- Summary Section -->
+                <div class="mb-3">
+                    <h4 class="fw-bold"><i class="bi bi-file-earmark-text"></i> Summary</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="report-card bg-light p-3 text-center shadow">
+                                <h6>Total Predictions</h6>
+                                <h3 class="fw-bold text-primary">${data.total_predictions}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="report-card bg-light p-3 text-center shadow">
+                                <h6>Disease Detections</h6>
+                                <h3 class="fw-bold text-danger">${data.disease_count}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="report-card bg-light p-3 text-center shadow">
+                                <h6>Ripeness Assessments</h6>
+                                <h3 class="fw-bold text-success">${data.ripeness_count}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Disease Insights -->
+                <div class="mb-3">
+                    <h4 class="fw-bold"><i class="bi bi-bug"></i> Disease Insights</h4>
+                    <p><strong>Most Common Disease:</strong> 
+                        <span class="badge bg-danger">${data.most_common_disease !== "healthy" ? data.most_common_disease : "No major diseases detected"}</span> 
+                        (${data.most_common_disease_count} times)
+                    </p>
+                    
+                    <p class="fw-bold mt-3"><i class="bi bi-bar-chart-line"></i> Confidence Analysis:</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="report-card bg-light p-3 shadow text-center">
+                                <h6>High Confidence</h6>
+                                <h3 class="fw-bold text-success">${data.high_confidence}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="report-card bg-light p-3 shadow text-center">
+                                <h6>Low Confidence</h6>
+                                <h3 class="fw-bold text-warning">${data.low_confidence}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Trends & Comparisons -->
+                <div class="mb-3">
+                    <h4 class="fw-bold"><i class="bi bi-graph-up"></i> Trends & Comparisons</h4>
+                    <p><strong>Compared to Last Month:</strong> 
+                        <span class="badge bg-info">${data.trend}</span>
+                    </p>
+                    <p><strong>Increase in Disease Cases:</strong><span class="badge bg-info"> ${data.disease_trend}</span></p>
+                    <p><strong>Ripeness Analysis:</strong><span class="badge bg-info"> ${data.ripeness_trend}</span></p>
+                </div>
+
+            </div>
+        `;
+
+        // Show the Bootstrap Modal
+        new bootstrap.Modal(document.getElementById('reportModal')).show();
+
     } catch (error) {
         console.error("🚨 Error fetching report:", error);
+        document.getElementById("reportContent").innerHTML = `<p>Error loading report.</p>`;
     }
 }
 
-// Print Report Function
-function printReport() {
-    const printContent = document.getElementById("reportContent").innerHTML;
-    const originalBody = document.body.innerHTML;
 
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalBody;
+//orinting the report
+function printReport() {
+    const reportContent = document.getElementById("reportContent").innerHTML;
+
+    const printWindow = window.open('', '', 'width=800,height=800');
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>TeaGuard Report</title>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                .report-container { max-width: 800px; margin: auto; }
+                .report-card { border-radius: 8px; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; }
+                h4, h3 { text-align: center; }
+            </style>
+        </head>
+        <body>
+            <div class="report-container">
+                ${reportContent}
+            </div>
+        </body>
+        <script>
+            window.onload = function () {
+                window.print();
+                setTimeout(() => window.close(), 100); // Close the print window automatically after printing
+            }
+        </script>
+        </html>
+    `);
 }
