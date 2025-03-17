@@ -64,6 +64,12 @@ app.mount("/pages", StaticFiles(directory=FRONTEND_DIR / "pages"), name="pages")
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR / "static"), name="static")
 # app.mount("/components", StaticFiles(directory=FRONTEND_DIR / "components"), name="components")
 
+
+#  Manually serve `manifest.json` with the correct MIME type
+@app.get("/static/manifest.json", include_in_schema=False)
+async def manifest():
+    return FileResponse("static/manifest.json", media_type="application/json")
+
 # Log registered routes on app startup
 @app.on_event("startup")
 async def show_routes():
