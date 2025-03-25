@@ -49,6 +49,7 @@ function loadHomePage() {
         })
         .then(html => {
             document.body.innerHTML = html;  // Replace the body content with the homepage
+            updateNavbar();
         })
         .catch(error => {
             console.error('Error loading the homepage:', error);
@@ -68,6 +69,7 @@ function fetchDetectPage() {
         })
         .then(html => {
             document.body.innerHTML = html;  // Load content into the body
+            updateNavbar();
         })
         .catch(error => {
             console.error('Error loading the upload page:', error);
@@ -85,6 +87,7 @@ function fetchDashbordPage() {
         .then(html => {
             document.body.innerHTML = html;  // Load content into the body
             console.log("🟢 Dashboard page loaded, now running loadDashboardData...");
+            updateNavbar();
             
             // Delay execution slightly to ensure DOM is fully loaded
             setTimeout(() => {
@@ -108,6 +111,9 @@ function fetchGuidePage(url) {
         })
         .then(html => {
             document.body.innerHTML = html;  // Load guide page content
+
+            updateNavbar();
+
             // Scroll to the relevant section based on disease anchor
             if (url && url !== "#") {
                 setTimeout(() => {

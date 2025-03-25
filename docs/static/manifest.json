@@ -1,36 +1,37 @@
 {
     "name": "TeaGuard",
     "short_name": "TeaGuard",
-    "start_url": "https://201e-112-134-143-47.ngrok-free.app/",
+    "start_url": "https://rotten-carpets-sniff.loca.lt/",
     "display": "standalone",
     "background_color": "#e8bd95",
     "theme_color": "#8c5c30",
     "orientation": "portrait-primary",
     "icons": [
-        {
-            "src": "https://201e-112-134-143-47.ngrok-free.app/assets/images/icons/icon_72x72.png",
-            "type": "image/png",
-            "sizes": "72x72"
-        },
-        {
-            "src": "https://201e-112-134-143-47.ngrok-free.app/assets/images/icons/icon_96x96.png",
-            "type": "image/png",
-            "sizes": "96x96"
-        },
-        {
-            "src": "https://201e-112-134-143-47.ngrok-free.app/assets/images/icons/icon_128x128.png",
-            "type": "image/png",
-            "sizes": "128x128"
-        },
-        {
-            "src": "https://201e-112-134-143-47.ngrok-free.app/assets/images/icons/icon_144x144.png",
-            "type": "image/png",
-            "sizes": "144x144"
-        },
-        {
-            "src": "https://201e-112-134-143-47.ngrok-free.app/assets/images/icons/icon_152x152.png",
-            "type": "image/png",
-            "sizes": "152x152"
-        }
+      {
+        "src": "https://rotten-carpets-sniff.loca.lt/assets/images/icons/icon_72x72.png",
+        "type": "image/png",
+        "sizes": "72x72"
+      },
+      {
+        "src": "https://rotten-carpets-sniff.loca.lt/assets/images/icons/icon_96x96.png",
+        "type": "image/png",
+        "sizes": "96x96"
+      },
+      {
+        "src": "https://rotten-carpets-sniff.loca.lt/assets/images/icons/icon_128x128.png",
+        "type": "image/png",
+        "sizes": "128x128"
+      },
+      {
+        "src": "https://rotten-carpets-sniff.loca.lt/assets/images/icons/icon_144x144.png",
+        "type": "image/png",
+        "sizes": "144x144"
+      },
+      {
+        "src": "https://rotten-carpets-sniff.loca.lt/assets/images/icons/icon_152x152.png",
+        "type": "image/png",
+        "sizes": "152x152"
+      }
     ]
-}
+  }
+  

@@ -4,15 +4,16 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 # Database Configuration
 DB_USER = "postgres"
 DB_PASSWORD = "root"  # Replace with your actual password
-DB_HOST = "localhost"
+# DB_HOST = "localhost"
+DB_HOST = "192.168.1.10"
 DB_PORT = "5433"
 DB_NAME = "teaguard"
 
-# DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 
 # Supabase PostgreSQL connection string
-DATABASE_URL = "postgresql+asyncpg://postgres:[YOUR-PASSWORD]@db.rpykwjtfnojgoqjubzqx.supabase.co:5432/postgres"
+# DATABASE_URL = "postgresql+asyncpg://postgres:[YOUR-PASSWORD]@db.rpykwjtfnojgoqjubzqx.supabase.co:5432/postgres"
 
 # Create async engine
 engine = create_async_engine(DATABASE_URL, echo=True)
