@@ -143,6 +143,56 @@
             font-weight: bold;
             padding: 10px 20px;
         }
+
+
+        .upload-button-group .chooseFileButton {
+            background-color: #458847;
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .upload-button-group .chooseFileButton:hover {
+            background-color: #4CAF50;
+            padding-right: 1.5rem;
+        }
+
+        /* Initially hide label */
+        .upload-button-group .btn-label {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* On hover, show label */
+        .upload-button-group .chooseFileButton:hover .btn-label {
+            width: auto;
+            opacity: 1;
+        }
+
+        /* Rounded corners */
+        .left-rounded {
+            border-top-left-radius: 30px;
+            border-bottom-left-radius: 30px;
+        }
+
+        .right-rounded {
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        /* Optional: Add slight border between them */
+        .upload-button-group .chooseFileButton+.chooseFileButton {
+            border-left: 1px solid #3d7741;
+        }
     </style>
 </head>
 
@@ -150,7 +200,8 @@
     <!-- Nav bar -->
     <nav class="navbar navbar-expand-lg py-4 py-lg-0 shadow">
         <div class="container px-4">
-            <a href="javascript:void(0)" onclick="loadHomePage()"><img src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
+            <a href="javascript:void(0)" onclick="loadHomePage()"><img
+                    src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#top-navbar" aria-controls="top-navbar">
                 <i class="bi bi-list"></i>
@@ -166,17 +217,20 @@
                 </button>
                 <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javascript:void(0)" onclick="loadHomePage(); closeOffcanvas()">Home</a>
-    
+                        <a class="nav-link" href="javascript:void(0)"
+                            onclick="loadHomePage(); closeOffcanvas()">Home</a>
+
                     </li>
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javascript:void(0)" onclick="fetchDetectPage(); closeOffcanvas()">Detect</a>
+                        <a class="nav-link" href="javascript:void(0)"
+                            onclick="fetchDetectPage(); closeOffcanvas()">Detect</a>
                     </li>
-                    
-    
-    
+
+
+
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javasceipt:void(0)"onclick="fetchDashbordPage(); closeOffcanvas()">Dashboard</a>
+                        <a class="nav-link" href="javasceipt:void(0)"
+                            onclick="fetchDashbordPage(); closeOffcanvas()">Dashboard</a>
                     </li>
                     <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -184,17 +238,19 @@
                             Resources
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="fetchGuidePage(); closeOffcanvas()">Disease Guide</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                    onclick="fetchGuidePage(); closeOffcanvas()">Disease Guide</a></li>
                             <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
                             <li><a class="dropdown-item" href="#">FAQ</a></li>
                         </ul>
                     </li>
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4" id="user-nav">
-                        <a class="nav-link text-center" href="javascript:void(0)" onclick="fetchSignIn(); closeOffcanvas()" id="signin">
+                        <a class="nav-link text-center" href="javascript:void(0)"
+                            onclick="fetchSignIn(); closeOffcanvas()" id="signin">
                             Sign In
                         </a>
                     </li>
-                    
+
                 </ul>
             </div>
         </div>
@@ -232,44 +288,63 @@
             <!-- Upload Area -->
             <div class="upload-area mt-5 py-5 px-4 border rounded shadow-lg" id="upload-area" data-aos="fade-up"
                 data-aos-duration="1000" data-aos-delay="300" style="pointer-events: none; opacity: 0.5;">
-                <h4 id="upload-heading" class="fw-bold mb-3">Select Detection Type First</h4>
-                <p class="mb-3">Drag and drop an image here or click the button to upload.</p>
-                <div class="d-flex flex-column align-items-center">
-                    <input type="file" id="imageUpload" class="form-control d-none" accept="image/*"
+
+                <h4 id="upload-heading" class="fw-bold mb-3 text-center animate__animated animate__fadeInDown">
+                    Select Detection Type First
+                </h4>
+                <p class="mb-4 text-center animate__animated animate__fadeInUp">Capture a new image or choose from
+                    gallery.</p>
+
+                <div class="upload-button-group d-flex justify-content-center mt-4">
+                    <!-- Camera Button -->
+                    <input type="file" id="cameraUpload" class="d-none" accept="image/*" capture="environment"
                         onchange="handleImage(this)">
-                    <button class="btn btn-lg btn-outline-primary chooseFileButton"
-                        onclick="document.getElementById('imageUpload').click()" disabled>
-                        <i class="bi bi-upload"></i> Choose File
+                    <button class="chooseFileButton left-rounded"
+                        onclick="document.getElementById('cameraUpload').click()" disabled>
+                        <i class="bi bi-camera-fill"></i>
+                        <span class="btn-label">Take Photo</span>
+                    </button>
+
+                    <!-- Gallery Button -->
+                    <input type="file" id="galleryUpload" class="d-none" accept="image/*" onchange="handleImage(this)">
+                    <button class="chooseFileButton right-rounded"
+                        onclick="document.getElementById('galleryUpload').click()" disabled>
+                        <i class="bi bi-image-fill"></i>
+                        <span class="btn-label">Gallery</span>
                     </button>
                 </div>
 
-                <!-- Image Preview -->
-                <div id="image-preview" class="mt-4"></div>
-
-                <!-- Scan Button -->
-                <div class="text-center mt-4">
-                    <button id="scanButton" class="btn btn-lg btn-success shadow-lg" style="display: none;"
-                        onclick="scanImage()">
-                        <i class="bi bi-search"></i> Scan Image
-                    </button>
-                </div>
             </div>
 
-            <!-- Result Display Section -->
-            <div id="result-card" class="mt-4 p-5 border rounded shadow-lg bg-light"
-                style="display: none; max-width: 700px; margin: auto;">
-                <h4 class="fw-bold text-center">Scan Results</h4>
-                <div id="result-content" class="mt-4 row align-items-center">
-                    <div class="col-12 text-center">
-                        <p class="fw-semibold">Analyzing...</p>
-                    </div>
-                </div>
-                <div class="text-center mt-4">
-                    <button class="btn btn-outline-secondary btn-lg" onclick="clearResults()">Try Another Image</button>
-                    <a href="javascript:void(0)" id="learnMoreBtn" class="btn btn-primary btn-lg ms-3"
-                        style="display: none;">Learn More</a>
+
+            <!-- Image Preview -->
+            <div id="image-preview" class="mt-4 d-flex justify-content-center"></div>
+
+
+            <!-- Scan Button -->
+            <div class="text-center mt-4">
+                <button id="scanButton" class="btn btn-lg btn-success shadow-lg" style="display: none;"
+                    onclick="scanImage()">
+                    <i class="bi bi-search"></i> Scan Image
+                </button>
+            </div>
+        </div>
+
+        <!-- Result Display Section -->
+        <div id="result-card" class="mt-4 p-5 border rounded shadow-lg bg-light"
+            style="display: none; max-width: 700px; margin: auto;">
+            <h4 class="fw-bold text-center">Scan Results</h4>
+            <div id="result-content" class="mt-4 row align-items-center">
+                <div class="col-12 text-center">
+                    <p class="fw-semibold">Analyzing...</p>
                 </div>
             </div>
+            <div class="text-center mt-4">
+                <button class="btn btn-outline-secondary btn-lg" onclick="clearResults()">Try Another Image</button>
+                <a href="javascript:void(0)" id="learnMoreBtn" class="btn btn-primary btn-lg ms-3"
+                    style="display: none;">Learn More</a>
+            </div>
+        </div>
 
 
 

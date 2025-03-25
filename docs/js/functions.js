@@ -1,5 +1,8 @@
 AOS.init();
 
+let uploadedFile = null;
+
+
 function closeOffcanvas() {
   let offcanvasElement = document.querySelector("#top-navbar");
   let bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
@@ -22,6 +25,7 @@ async function checkSession() {
     console.error("Error checking session:", error);
   }
 }
+
 
 //  Update Navbar Based on Session
 async function updateNavbar() {
@@ -243,61 +247,65 @@ function selectDetection(type) {
 }
 
 function updateSelection(type) {
-  detectionType = type;
-
-  const uploadHeading = document.getElementById("upload-heading");
-  uploadHeading.innerText =
-    type === "disease"
-      ? "Upload Image for Disease Detection"
-      : "Upload Image for Ripeness Assessment";
-
-  // Enable the upload area
-  document.getElementById("upload-area").style.pointerEvents = "auto";
-  document.getElementById("upload-area").style.opacity = "1";
-  document.querySelector(".chooseFileButton").disabled = false;
-
-  console.log(`Selected detection type: ${type}`);
-}
-
-function handleImage(input) {
-  const file = input.files[0];
-  const previewContainer = document.getElementById("image-preview");
-  const scanButton = document.getElementById("scanButton");
-
-  previewContainer.innerHTML = ""; // Clear previous preview
-
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const img = document.createElement("img");
-      img.src = e.target.result;
-      img.alt = "Uploaded Image";
-
-      // Set a fixed size for better UI consistency
-      img.style.maxWidth = "300px";
-      img.style.maxHeight = "300px";
-      img.style.borderRadius = "10px";
-      img.style.objectFit = "cover"; // Ensures the image maintains aspect ratio without distortion
-      img.classList.add("shadow-lg");
-
-      // Add a fade-in effect for a smoother appearance
-      img.style.opacity = "0";
-      previewContainer.appendChild(img);
-      setTimeout(() => {
-        img.style.opacity = "1";
-        img.style.transition = "opacity 0.3s ease-in-out";
-      }, 50);
-
-      // Show the scan button after image upload with an animation
-      scanButton.style.display = "inline-block";
-      scanButton.classList.add("animate__animated", "animate__fadeInUp"); // Animate CSS fade-in effect
-    };
-    reader.readAsDataURL(file);
-  } else {
-    // Hide scan button if no file is selected
-    scanButton.style.display = "none";
+    detectionType = type;
+  
+    const uploadHeading = document.getElementById("upload-heading");
+    uploadHeading.innerText =
+      type === "disease"
+        ? "Upload Image for Disease Detection"
+        : "Upload Image for Ripeness Assessment";
+  
+    // Enable the upload area
+    const uploadArea = document.getElementById("upload-area");
+    uploadArea.style.pointerEvents = "auto";
+    uploadArea.style.opacity = "1";
+  
+    // Enable all choose file buttons
+    const chooseFileButtons = document.querySelectorAll(".chooseFileButton");
+    chooseFileButtons.forEach(btn => btn.disabled = false);
+  
+    console.log(`Selected detection type: ${type}`);
   }
-}
+  
+//handling the image and showing it in preview after upload the image
+  function handleImage(input) {
+    const file = input.files[0];
+    uploadedFile = file;  // 🔥 Store the file globally
+  
+    const previewContainer = document.getElementById("image-preview");
+    const scanButton = document.getElementById("scanButton");
+  
+    previewContainer.innerHTML = ""; // Clear previous preview
+  
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.alt = "Uploaded Image";
+  
+        img.style.maxWidth = "300px";
+        img.style.maxHeight = "300px";
+        img.style.borderRadius = "10px";
+        img.style.objectFit = "cover";
+        img.classList.add("shadow-lg");
+  
+        img.style.opacity = "0";
+        previewContainer.appendChild(img);
+        setTimeout(() => {
+          img.style.opacity = "1";
+          img.style.transition = "opacity 0.3s ease-in-out";
+        }, 50);
+  
+        scanButton.style.display = "inline-block";
+        scanButton.classList.add("animate__animated", "animate__fadeInUp");
+      };
+      reader.readAsDataURL(file);
+    } else {
+      scanButton.style.display = "none";
+    }
+  }
+  
 
 // Disease name mapping with respective URLs for prevention guidance
 // Mapping for disease names and ripeness levels
@@ -351,97 +359,121 @@ const resultMapping = {
   },
 };
 
+//whent he scan iamge button pressed
 function scanImage() {
-  const imageInput = document.getElementById("imageUpload");
-
-  if (!imageInput.files.length) {
-    Swal.fire({
-      title: "No Image Selected",
-      text: "Please upload an image before scanning.",
-      icon: "error",
-      confirmButtonColor: "#4CAF50",
-    });
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("file", imageInput.files[0]);
-
-  // Determine API endpoint based on detection type
-  let apiEndpoint =
-    detectionType === "disease" ? "/predict-disease" : "/predict-ripeness";
-
-  // Show loading in result section
-  const resultCard = document.getElementById("result-card");
-  const resultContent = document.getElementById("result-content");
-
-  resultCard.style.display = "block";
-  resultContent.innerHTML = `<div class="col-12 text-center">
-                                <div class="spinner-border text-success" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                                <p class="mt-2">Analyzing your image...</p>
-                            </div>`;
-
-  // Send the image to the backend for processing
-  fetch(apiEndpoint, {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      let resultKey = data.class.toLowerCase();
-      let resultInfo = resultMapping[resultKey] || {
-        name: "Unknown Condition",
-        icon: "bi-question-circle-fill",
-        color: "text-muted",
-      };
-
-      // Show results dynamically with Bootstrap grid layout
-      resultContent.innerHTML = `
-          <div class="row align-items-center">
-              <div class="col-md-4 text-center">
-                  <i class="bi ${resultInfo.icon} ${resultInfo.color} display-1"></i>
-              </div>
-              <div class="col-md-8">
-                  <h3 class="fw-bold ${resultInfo.color}">${resultInfo.name}</h3>
-                  <p class="fs-5"><strong>Result:</strong> <span class="${resultInfo.color}">${resultInfo.name}</span></p>
-                  <p class="fs-5"><strong>Confidence:</strong> <span class="text-info">${data.confidence}</span></p>
-              </div>
-          </div>
-      `;
-
-      // Hide "Learn More" button for ripeness assessment
-      const learnMoreBtn = document.getElementById("learnMoreBtn");
-      if (detectionType === "disease" && resultKey !== "healthy") {
-        learnMoreBtn.style.display = "inline-block";
-        learnMoreBtn.setAttribute("onclick", `fetchGuidePage()`);
-      } else {
-        learnMoreBtn.style.display = "none";
-      }
-
-      // Add animation to the result card
-      resultCard.classList.add("animate__animated", "animate__fadeInUp");
+    const cameraInput = document.getElementById("cameraUpload");
+    const galleryInput = document.getElementById("galleryUpload");
+  
+    // Determine which input was used
+    const file =
+      cameraInput.files.length > 0
+        ? cameraInput.files[0]
+        : galleryInput.files.length > 0
+        ? galleryInput.files[0]
+        : null;
+  
+    if (!file) {
+      Swal.fire({
+        title: "No Image Selected",
+        text: "Please upload an image before scanning.",
+        icon: "error",
+        confirmButtonColor: "#4CAF50",
+      });
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    // Determine API endpoint based on detection type
+    let apiEndpoint =
+      detectionType === "disease" ? "/predict-disease" : "/predict-ripeness";
+  
+    // Show loading in result section
+    const resultCard = document.getElementById("result-card");
+    const resultContent = document.getElementById("result-content");
+  
+    resultCard.style.display = "block";
+    resultContent.innerHTML = `<div class="col-12 text-center">
+                                  <div class="spinner-border text-success" role="status">
+                                      <span class="visually-hidden">Loading...</span>
+                                  </div>
+                                  <p class="mt-2">Analyzing your image...</p>
+                              </div>`;
+  
+    // Send the image to the backend for processing
+    fetch(apiEndpoint, {
+      method: "POST",
+      body: formData,
     })
-    .catch((error) => {
-      resultContent.innerHTML = `
-          <div class="col-md-12 text-center">
-              <i class="bi bi-exclamation-circle text-danger display-1"></i>
-              <h5 class="mt-3 text-danger">Error Occurred</h5>
-              <p class="text-muted">Something went wrong while scanning the image. Please try again.</p>
-          </div>
-      `;
-      console.error("Error scanning the image:", error);
-    });
-}
+      .then((response) => response.json())
+      .then((data) => {
+        let resultKey = data.class.toLowerCase();
+        let resultInfo = resultMapping[resultKey] || {
+          name: "Unknown Condition",
+          icon: "bi-question-circle-fill",
+          color: "text-muted",
+        };
+  
+        // Show results dynamically with Bootstrap grid layout
+        resultContent.innerHTML = `
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center">
+                    <i class="bi ${resultInfo.icon} ${resultInfo.color} display-1"></i>
+                </div>
+                <div class="col-md-8">
+                    <h3 class="fw-bold ${resultInfo.color}">${resultInfo.name}</h3>
+                    <p class="fs-5"><strong>Result:</strong> <span class="${resultInfo.color}">${resultInfo.name}</span></p>
+                    <p class="fs-5"><strong>Confidence:</strong> <span class="text-info">${data.confidence}</span></p>
+                </div>
+            </div>
+        `;
+  
+        // Hide "Learn More" button for ripeness assessment
+        const learnMoreBtn = document.getElementById("learnMoreBtn");
+        if (detectionType === "disease" && resultKey !== "healthy") {
+          learnMoreBtn.style.display = "inline-block";
+          learnMoreBtn.setAttribute("onclick", `fetchGuidePage()`);
+        } else {
+          learnMoreBtn.style.display = "none";
+        }
+  
+        // Add animation to the result card
+        resultCard.classList.add("animate__animated", "animate__fadeInUp");
+      })
+      .catch((error) => {
+        resultContent.innerHTML = `
+            <div class="col-md-12 text-center">
+                <i class="bi bi-exclamation-circle text-danger display-1"></i>
+                <h5 class="mt-3 text-danger">Error Occurred</h5>
+                <p class="text-muted">Something went wrong while scanning the image. Please try again.</p>
+            </div>
+        `;
+        console.error("Error scanning the image:", error);
+      });
+  }
+  
 
 // Function to clear results and allow new upload
 function clearResults() {
-  document.getElementById("imageUpload").value = "";
-  document.getElementById("image-preview").innerHTML = "";
-  document.getElementById("scanButton").style.display = "none";
-  document.getElementById("result-card").style.display = "none";
-}
+    const cameraInput = document.getElementById("cameraUpload");
+    const galleryInput = document.getElementById("galleryUpload");
+    const previewContainer = document.getElementById("image-preview");
+    const scanButton = document.getElementById("scanButton");
+    const resultCard = document.getElementById("result-card");
+    const resultContent = document.getElementById("result-content");
+  
+    // Safely reset both file inputs if they exist
+    if (cameraInput) cameraInput.value = "";
+    if (galleryInput) galleryInput.value = "";
+  
+    // Clear preview & result sections
+    if (previewContainer) previewContainer.innerHTML = "";
+    if (scanButton) scanButton.style.display = "none";
+    if (resultCard) resultCard.style.display = "none";
+    if (resultContent) resultContent.innerHTML = "";
+  }
+  
 
 async function loadDashboardData() {
   try {
