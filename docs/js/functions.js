@@ -83,6 +83,7 @@ async function logout() {
   try {
     await fetch("/logout", { method: "POST" });
     checkSession(); // Refresh navbar
+    location.reload();// reload page
   } catch (error) {
     console.error("Logout error:", error);
   }
