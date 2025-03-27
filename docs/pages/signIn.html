@@ -30,28 +30,28 @@
     <link rel="manifest" href="/static/manifest.json">
 
     <style>
-         body {
-        height: 100%;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-      }
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
 
-      .main {
-        flex: 1;
-      }
+        .main {
+            flex: 1;
+        }
 
-      .siginimg {
-        background-image: url("../assets/images/signin.png");
-        background-size: cover;
-      }
+        .siginimg {
+            background-image: url("../assets/images/signin.png");
+            background-size: cover;
+        }
 
-      .password-toggle {
-        cursor: pointer;
-        position: absolute;
-        right: 10px;
-        top: 35px;
-      }
+        .password-toggle {
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 35px;
+        }
     </style>
 
 </head>
@@ -60,7 +60,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg py-4 py-lg-0 shadow">
         <div class="container px-4">
-            <a href="javascript:void(0)" onclick="loadHomePage()"><img src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
+            <a href="javascript:void(0)" onclick="loadHomePage()"><img
+                    src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#top-navbar" aria-controls="top-navbar">
                 <i class="bi bi-list"></i>
@@ -76,17 +77,20 @@
                 </button>
                 <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javascript:void(0)" onclick="loadHomePage(); closeOffcanvas()">Home</a>
-    
+                        <a class="nav-link" href="javascript:void(0)"
+                            onclick="loadHomePage(); closeOffcanvas()">Home</a>
+
                     </li>
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javascript:void(0)" onclick="fetchDetectPage(); closeOffcanvas()">Detect</a>
+                        <a class="nav-link" href="javascript:void(0)"
+                            onclick="fetchDetectPage(); closeOffcanvas()">Detect</a>
                     </li>
-                    
-    
-    
+
+
+
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javasceipt:void(0)"onclick="fetchDashbordPage(); closeOffcanvas()">Dashboard</a>
+                        <a class="nav-link" href="javasceipt:void(0)"
+                            onclick="fetchDashbordPage(); closeOffcanvas()">Dashboard</a>
                     </li>
                     <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -94,17 +98,19 @@
                             Resources
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="fetchGuidePage(); closeOffcanvas()">Disease Guide</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                    onclick="fetchGuidePage(); closeOffcanvas()">Disease Guide</a></li>
                             <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
                             <li><a class="dropdown-item" href="#">FAQ</a></li>
                         </ul>
                     </li>
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4" id="user-nav">
-                        <a class="nav-link text-center" href="javascript:void(0)" onclick="fetchSignIn(); closeOffcanvas()" id="signin">
+                        <a class="nav-link text-center" href="javascript:void(0)"
+                            onclick="fetchSignIn(); closeOffcanvas()" id="signin">
                             Sign In
                         </a>
                     </li>
-                    
+
                 </ul>
             </div>
         </div>
@@ -160,6 +166,17 @@
                                     </span>
                                 </div>
 
+                                <!-- Privacy Notice -->
+                                <p class="text-muted text-justify mt-3"
+                                    style="font-size: 0.68rem; text-align: justify; opacity: 0.8;">
+                                    We respect your privacy. Your email, username, and password are collected solely for
+                                    login and report access purposes.
+                                    All passwords are securely stored using industry-standard encryption. We do not
+                                    share your information with any third parties.
+                                    By using this application, you agree to our data handling practices.
+                                </p>
+
+
                                 <div class="d-flex justify-content-center pb-5 pt-3">
                                     <button type="submit" class="btn btn-primary" style="background-color: #458847">
                                         SUBMIT
@@ -170,7 +187,8 @@
                             <div class="text-center mt-3">
                                 <p>
                                     Already have an account?
-                                    <a  href="javascript:void(0)" onclick="fetchLogIn(); " style="color: #458847; font-weight: bold">Log in</a>
+                                    <a href="javascript:void(0)" onclick="fetchLogIn(); "
+                                        style="color: #458847; font-weight: bold">Log in</a>
                                 </p>
                             </div>
                         </div>
@@ -183,7 +201,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer text-light py-4 d-flex justify-content-center align-items-center mt-5" style="position: relative; bottom: 0;">
+    <footer class="footer text-light py-4 d-flex justify-content-center align-items-center mt-5"
+        style="position: relative; bottom: 0;">
         <div class="container">
             <div class="text-center">
                 <p class="mb-0">&copy; 2023 TeaGuard. All rights reserved.</p>
@@ -203,7 +222,7 @@
     <!-- JS Files -->
     <script src="/js/requests.js"></script>
     <script src="/js/functions.js"></script>
-    
+
 
 </body>
 
