@@ -2,7 +2,6 @@ AOS.init();
 
 let uploadedFile = null;
 
-
 function closeOffcanvas() {
   let offcanvasElement = document.querySelector("#top-navbar");
   let bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
@@ -25,7 +24,6 @@ async function checkSession() {
     console.error("Error checking session:", error);
   }
 }
-
 
 //  Update Navbar Based on Session
 async function updateNavbar() {
@@ -83,7 +81,7 @@ async function logout() {
   try {
     await fetch("/logout", { method: "POST" });
     checkSession(); // Refresh navbar
-    location.reload();// reload page
+    location.reload(); // reload page
   } catch (error) {
     console.error("Logout error:", error);
   }
@@ -202,111 +200,109 @@ document.getElementById("download-app-btn").addEventListener("click", (e) => {
 });
 
 let detectionType = "";
-
 function selectDetection(type) {
-  const uploadArea = document.getElementById("upload-area");
   const uploadHeading = document.getElementById("upload-heading");
-  const chooseFileButton = document.querySelector(".chooseFileButton");
-  const imageInput = document.getElementById("imageUpload");
-  const previewContainer = document.getElementById("image-preview");
-  const scanButton = document.getElementById("scanButton");
 
   if (detectionType && detectionType !== type) {
     // Show SweetAlert confirmation
     Swal.fire({
-      title: "Confirm Detection Type Change",
-      text: "Switching the detection type will reset your uploaded image. Do you want to proceed?",
-      icon: "warning",
+      title: "Switch Detection Type?",
+      text: "Changing detection type will clear the uploaded image.",
+      icon: "question",
       showCancelButton: true,
+      confirmButtonText: "Yes, switch",
+      cancelButtonText: "Cancel",
       confirmButtonColor: "#4CAF50",
-      cancelButtonColor: "#d9534f",
-      confirmButtonText: "Yes, Switch",
-      cancelButtonText: "No, Keep It",
-      background: "#f0f8e2",
-      color: "#333",
-      iconHtml: '<i class="bi bi-exclamation-circle"></i>',
-      buttonsStyling: false,
+      cancelButtonColor: "#888",
+
       customClass: {
-        popup: "rounded-lg shadow-lg",
-        confirmButton: "btn btn-success btn-lg px-4",
-        cancelButton: "btn btn-danger btn-lg px-4",
-        title: "fw-bold fs-4",
-        text: "text-secondary",
+        popup: "rounded-4 shadow",
+        confirmButton: "btn btn-success px-4",
+        cancelButton: "btn btn-secondary px-4",
+        title: "fs-4 fw-semibold",
+        text: "text-muted",
       },
+      background: "#ffffff",
+      iconColor: "#4CAF50",
+      buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        // Reset the uploaded image
-        document.getElementById("imageUpload").value = "";
+        //  Update detection type first
+        detectionType = type;
+
+        //  Reset all inputs
+        document.getElementById("cameraUpload").value = "";
+        document.getElementById("galleryUpload").value = "";
         document.getElementById("image-preview").innerHTML = "";
         document.getElementById("scanButton").style.display = "none";
+        document.getElementById("result-card").style.display = "none";
+
+        //  Update heading and enable UI
         updateSelection(type);
       }
     });
   } else {
+    detectionType = type;
     updateSelection(type);
   }
 }
 
 function updateSelection(type) {
-    detectionType = type;
-  
-    const uploadHeading = document.getElementById("upload-heading");
-    uploadHeading.innerText =
-      type === "disease"
-        ? "Upload Image for Disease Detection"
-        : "Upload Image for Ripeness Assessment";
-  
-    // Enable the upload area
-    const uploadArea = document.getElementById("upload-area");
-    uploadArea.style.pointerEvents = "auto";
-    uploadArea.style.opacity = "1";
-  
-    // Enable all choose file buttons
-    const chooseFileButtons = document.querySelectorAll(".chooseFileButton");
-    chooseFileButtons.forEach(btn => btn.disabled = false);
-  
-    console.log(`Selected detection type: ${type}`);
-  }
-  
+  const uploadHeading = document.getElementById("upload-heading");
+  const uploadArea = document.getElementById("upload-area");
+
+  uploadHeading.innerText =
+    type === "disease"
+      ? "Upload Image for Disease Detection"
+      : "Upload Image for Ripeness Assessment";
+
+  uploadArea.style.pointerEvents = "auto";
+  uploadArea.style.opacity = "1";
+
+  const chooseFileButtons = document.querySelectorAll(".chooseFileButton");
+  chooseFileButtons.forEach((btn) => (btn.disabled = false));
+
+  console.log(`Selected detection type: ${type}`);
+}
+
 //handling the image and showing it in preview after upload the image
-  function handleImage(input) {
-    const file = input.files[0];
-    uploadedFile = file;  // 🔥 Store the file globally
-  
-    const previewContainer = document.getElementById("image-preview");
-    const scanButton = document.getElementById("scanButton");
-  
-    previewContainer.innerHTML = ""; // Clear previous preview
-  
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = document.createElement("img");
-        img.src = e.target.result;
-        img.alt = "Uploaded Image";
-  
-        img.style.maxWidth = "300px";
-        img.style.maxHeight = "300px";
-        img.style.borderRadius = "10px";
-        img.style.objectFit = "cover";
-        img.classList.add("shadow-lg");
-  
-        img.style.opacity = "0";
-        previewContainer.appendChild(img);
-        setTimeout(() => {
-          img.style.opacity = "1";
-          img.style.transition = "opacity 0.3s ease-in-out";
-        }, 50);
-  
-        scanButton.style.display = "inline-block";
-        scanButton.classList.add("animate__animated", "animate__fadeInUp");
-      };
-      reader.readAsDataURL(file);
-    } else {
-      scanButton.style.display = "none";
-    }
+function handleImage(input) {
+  const file = input.files[0];
+  uploadedFile = file; //  Store the file globally
+
+  const previewContainer = document.getElementById("image-preview");
+  const scanButton = document.getElementById("scanButton");
+
+  previewContainer.innerHTML = ""; // Clear previous preview
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      img.alt = "Uploaded Image";
+
+      img.style.maxWidth = "300px";
+      img.style.maxHeight = "300px";
+      img.style.borderRadius = "10px";
+      img.style.objectFit = "cover";
+      img.classList.add("shadow-lg");
+
+      img.style.opacity = "0";
+      previewContainer.appendChild(img);
+      setTimeout(() => {
+        img.style.opacity = "1";
+        img.style.transition = "opacity 0.3s ease-in-out";
+      }, 50);
+
+      scanButton.style.display = "inline-block";
+      scanButton.classList.add("animate__animated", "animate__fadeInUp");
+    };
+    reader.readAsDataURL(file);
+  } else {
+    scanButton.style.display = "none";
   }
-  
+}
 
 // Disease name mapping with respective URLs for prevention guidance
 // Mapping for disease names and ripeness levels
@@ -362,62 +358,62 @@ const resultMapping = {
 
 //whent he scan iamge button pressed
 function scanImage() {
-    const cameraInput = document.getElementById("cameraUpload");
-    const galleryInput = document.getElementById("galleryUpload");
-  
-    // Determine which input was used
-    const file =
-      cameraInput.files.length > 0
-        ? cameraInput.files[0]
-        : galleryInput.files.length > 0
-        ? galleryInput.files[0]
-        : null;
-  
-    if (!file) {
-      Swal.fire({
-        title: "No Image Selected",
-        text: "Please upload an image before scanning.",
-        icon: "error",
-        confirmButtonColor: "#4CAF50",
-      });
-      return;
-    }
-  
-    const formData = new FormData();
-    formData.append("file", file);
-  
-    // Determine API endpoint based on detection type
-    let apiEndpoint =
-      detectionType === "disease" ? "/predict-disease" : "/predict-ripeness";
-  
-    // Show loading in result section
-    const resultCard = document.getElementById("result-card");
-    const resultContent = document.getElementById("result-content");
-  
-    resultCard.style.display = "block";
-    resultContent.innerHTML = `<div class="col-12 text-center">
+  const cameraInput = document.getElementById("cameraUpload");
+  const galleryInput = document.getElementById("galleryUpload");
+
+  // Determine which input was used
+  const file =
+    cameraInput.files.length > 0
+      ? cameraInput.files[0]
+      : galleryInput.files.length > 0
+      ? galleryInput.files[0]
+      : null;
+
+  if (!file) {
+    Swal.fire({
+      title: "No Image Selected",
+      text: "Please upload an image before scanning.",
+      icon: "error",
+      confirmButtonColor: "#4CAF50",
+    });
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  // Determine API endpoint based on detection type
+  let apiEndpoint =
+    detectionType === "disease" ? "/predict-disease" : "/predict-ripeness";
+
+  // Show loading in result section
+  const resultCard = document.getElementById("result-card");
+  const resultContent = document.getElementById("result-content");
+
+  resultCard.style.display = "block";
+  resultContent.innerHTML = `<div class="col-12 text-center">
                                   <div class="spinner-border text-success" role="status">
                                       <span class="visually-hidden">Loading...</span>
                                   </div>
                                   <p class="mt-2">Analyzing your image...</p>
                               </div>`;
-  
-    // Send the image to the backend for processing
-    fetch(apiEndpoint, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        let resultKey = data.class.toLowerCase();
-        let resultInfo = resultMapping[resultKey] || {
-          name: "Unknown Condition",
-          icon: "bi-question-circle-fill",
-          color: "text-muted",
-        };
-  
-        // Show results dynamically with Bootstrap grid layout
-        resultContent.innerHTML = `
+
+  // Send the image to the backend for processing
+  fetch(apiEndpoint, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      let resultKey = data.class.toLowerCase();
+      let resultInfo = resultMapping[resultKey] || {
+        name: "Unknown Condition",
+        icon: "bi-question-circle-fill",
+        color: "text-muted",
+      };
+
+      // Show results dynamically with Bootstrap grid layout
+      resultContent.innerHTML = `
             <div class="row align-items-center">
                 <div class="col-md-4 text-center">
                     <i class="bi ${resultInfo.icon} ${resultInfo.color} display-1"></i>
@@ -429,52 +425,50 @@ function scanImage() {
                 </div>
             </div>
         `;
-  
-        // Hide "Learn More" button for ripeness assessment
-        const learnMoreBtn = document.getElementById("learnMoreBtn");
-        if (detectionType === "disease" && resultKey !== "healthy") {
-          learnMoreBtn.style.display = "inline-block";
-          learnMoreBtn.setAttribute("onclick", `fetchGuidePage()`);
-        } else {
-          learnMoreBtn.style.display = "none";
-        }
-  
-        // Add animation to the result card
-        resultCard.classList.add("animate__animated", "animate__fadeInUp");
-      })
-      .catch((error) => {
-        resultContent.innerHTML = `
+
+      // Hide "Learn More" button for ripeness assessment
+      const learnMoreBtn = document.getElementById("learnMoreBtn");
+      if (detectionType === "disease" && resultKey !== "healthy") {
+        learnMoreBtn.style.display = "inline-block";
+        learnMoreBtn.setAttribute("onclick", `fetchGuidePage()`);
+      } else {
+        learnMoreBtn.style.display = "none";
+      }
+
+      // Add animation to the result card
+      resultCard.classList.add("animate__animated", "animate__fadeInUp");
+    })
+    .catch((error) => {
+      resultContent.innerHTML = `
             <div class="col-md-12 text-center">
                 <i class="bi bi-exclamation-circle text-danger display-1"></i>
                 <h5 class="mt-3 text-danger">Error Occurred</h5>
                 <p class="text-muted">Something went wrong while scanning the image. Please try again.</p>
             </div>
         `;
-        console.error("Error scanning the image:", error);
-      });
-  }
-  
+      console.error("Error scanning the image:", error);
+    });
+}
 
 // Function to clear results and allow new upload
 function clearResults() {
-    const cameraInput = document.getElementById("cameraUpload");
-    const galleryInput = document.getElementById("galleryUpload");
-    const previewContainer = document.getElementById("image-preview");
-    const scanButton = document.getElementById("scanButton");
-    const resultCard = document.getElementById("result-card");
-    const resultContent = document.getElementById("result-content");
-  
-    // Safely reset both file inputs if they exist
-    if (cameraInput) cameraInput.value = "";
-    if (galleryInput) galleryInput.value = "";
-  
-    // Clear preview & result sections
-    if (previewContainer) previewContainer.innerHTML = "";
-    if (scanButton) scanButton.style.display = "none";
-    if (resultCard) resultCard.style.display = "none";
-    if (resultContent) resultContent.innerHTML = "";
-  }
-  
+  const cameraInput = document.getElementById("cameraUpload");
+  const galleryInput = document.getElementById("galleryUpload");
+  const previewContainer = document.getElementById("image-preview");
+  const scanButton = document.getElementById("scanButton");
+  const resultCard = document.getElementById("result-card");
+  const resultContent = document.getElementById("result-content");
+
+  // Safely reset both file inputs if they exist
+  if (cameraInput) cameraInput.value = "";
+  if (galleryInput) galleryInput.value = "";
+
+  // Clear preview & result sections
+  if (previewContainer) previewContainer.innerHTML = "";
+  if (scanButton) scanButton.style.display = "none";
+  if (resultCard) resultCard.style.display = "none";
+  if (resultContent) resultContent.innerHTML = "";
+}
 
 async function loadDashboardData() {
   try {
@@ -498,25 +492,30 @@ async function loadDashboardData() {
         return;
       }
 
-    //   document.getElementById("mostFrequentDisease").innerText =
-    //     data.most_common_disease || "No disease detected";
+      //   document.getElementById("mostFrequentDisease").innerText =
+      //     data.most_common_disease || "No disease detected";
 
-    const diseaseEl = document.getElementById("mostFrequentDisease");
-const learnMoreBtn = document.getElementById("learnMoreBtn");
+      const diseaseEl = document.getElementById("mostFrequentDisease");
+      const learnMoreBtn = document.getElementById("learnMoreBtn");
 
-let formattedDisease = data.most_common_disease.replace(/_/g, " ")
-    .replace(/\b\w/g, char => char.toUpperCase());
+      let formattedDisease = data.most_common_disease
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
 
-diseaseEl.innerText = formattedDisease;
+      diseaseEl.innerText = formattedDisease;
 
-// Show "Learn More" button only if it's a real disease (not healthy or unknown)
-if (data.most_common_disease && data.most_common_disease !== "healthy" && data.most_common_disease !== "No disease detected") {
-    learnMoreBtn.style.display = "inline-block";
-    learnMoreBtn.onclick = () => fetchGuidePage(`#${data.most_common_disease}`);
-} else {
-    learnMoreBtn.style.display = "none";
-}
-
+      // Show "Learn More" button only if it's a real disease (not healthy or unknown)
+      if (
+        data.most_common_disease &&
+        data.most_common_disease !== "healthy" &&
+        data.most_common_disease !== "No disease detected"
+      ) {
+        learnMoreBtn.style.display = "inline-block";
+        learnMoreBtn.onclick = () =>
+          fetchGuidePage(`#${data.most_common_disease}`);
+      } else {
+        learnMoreBtn.style.display = "none";
+      }
 
       //  Update UI Elements
       totalPred.innerText = data.total;
@@ -644,9 +643,9 @@ function generateCharts(diseaseData, ripenessData) {
 }
 async function generateReport() {
   try {
-    console.log("📄 Fetching report data...");
+    console.log(" Fetching report data...");
 
-    const timeFilter = document.getElementById("reportFilter").value; // Get selected time filter
+    const timeFilter = document.getElementById("reportFilter").value;
     const response = await fetch(`/user-report?time_filter=${timeFilter}`);
     if (!response.ok) throw new Error("Failed to fetch report data.");
 
@@ -654,108 +653,99 @@ async function generateReport() {
     console.log(" Report Data:", data);
 
     if (data.message) {
-      document.getElementById(
-        "reportContent"
-      ).innerHTML = `<p>${data.message}</p>`;
+      document.getElementById("reportContent").innerHTML = `<p>${data.message}</p>`;
       return;
     }
 
-    // Generate Styled Report Content
+    // Build recent history rows (max 5)
+    let historyRows = "";
+    if (data.predictions && data.predictions.length > 0) {
+      const latest = data.predictions.slice(-5).reverse();
+      historyRows = latest
+        .map(
+          (p) => `
+          <tr>
+            <td>${p.date}</td>
+            <td>${p.type}</td>
+            <td>${p.result}</td>
+            <td>${p.confidence}</td>
+          </tr>`
+        )
+        .join("");
+    }
+
+    // Generate two-column table style report
     document.getElementById("reportContent").innerHTML = `
-            <div class="report-container p-3">
-                
-                <!-- Summary Section -->
-                <div class="mb-3">
-                    <h4 class="fw-bold"><i class="bi bi-file-earmark-text"></i> Summary</h4>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="report-card bg-light p-3 text-center shadow">
-                                <h6>Total Predictions</h6>
-                                <h3 class="fw-bold text-primary">${
-                                  data.total_predictions
-                                }</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="report-card bg-light p-3 text-center shadow">
-                                <h6>Disease Detections</h6>
-                                <h3 class="fw-bold text-danger">${
-                                  data.disease_count
-                                }</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="report-card bg-light p-3 text-center shadow">
-                                <h6>Ripeness Assessments</h6>
-                                <h3 class="fw-bold text-success">${
-                                  data.ripeness_count
-                                }</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="p-3">
 
-                <hr>
+        <h4 class="fw-bold mb-3">TeaGuard Report Summary</h4>
 
-                <!-- Disease Insights -->
-                <div class="mb-3">
-                    <h4 class="fw-bold"><i class="bi bi-bug"></i> Disease Insights</h4>
-                    <p><strong>Most Common Disease:</strong> 
-                        <span class="badge bg-danger">${
-                          data.most_common_disease !== "healthy"
-                            ? data.most_common_disease
-                            : "No major diseases detected"
-                        }</span> 
-                        (${data.most_common_disease_count} times)
-                    </p>
-                    
-                    <p class="fw-bold mt-3"><i class="bi bi-bar-chart-line"></i> Confidence Analysis:</p>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="report-card bg-light p-3 shadow text-center">
-                                <h6>High Confidence</h6>
-                                <h3 class="fw-bold text-success">${
-                                  data.high_confidence
-                                }</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="report-card bg-light p-3 shadow text-center">
-                                <h6>Low Confidence</h6>
-                                <h3 class="fw-bold text-warning">${
-                                  data.low_confidence
-                                }</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <table class="table table-bordered small">
+          <tbody>
+            <tr>
+              <th>Total Predictions</th>
+              <td>${data.total_predictions}</td>
+            </tr>
+            <tr>
+              <th>Disease Detections</th>
+              <td>${data.disease_count}</td>
+            </tr>
+            <tr>
+              <th>Ripeness Assessments</th>
+              <td>${data.ripeness_count}</td>
+            </tr>
+            <tr>
+              <th>Most Common Disease</th>
+              <td>${
+                data.most_common_disease !== "healthy"
+                  ? data.most_common_disease + ` (${data.most_common_disease_count} times)`
+                  : "No major diseases (mostly healthy)"
+              }</td>
+            </tr>
+            <tr>
+              <th>High Confidence</th>
+              <td>${data.high_confidence}</td>
+            </tr>
+            <tr>
+              <th>Low Confidence</th>
+              <td>${data.low_confidence}</td>
+            </tr>
+            <tr>
+              <th>Prediction Trend</th>
+              <td>${data.trend}</td>
+            </tr>
+            <tr>
+              <th>Disease Trend</th>
+              <td>${data.disease_trend}</td>
+            </tr>
+            <tr>
+              <th>Ripeness Trend</th>
+              <td>${data.ripeness_trend}</td>
+            </tr>
+          </tbody>
+        </table>
 
-                <hr>
+        <h5 class="fw-bold mt-4">Recent Predictions</h5>
+        <table class="table table-sm table-striped small">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Result</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${historyRows || `<tr><td colspan="4" class="text-center">No predictions available</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    `;
 
-                <!-- Trends & Comparisons -->
-                <div class="mb-3">
-                    <h4 class="fw-bold"><i class="bi bi-graph-up"></i> Trends & Comparisons</h4>
-                    <p><strong>Compared to Last Month:</strong> 
-                        <span class="badge bg-info">${data.trend}</span>
-                    </p>
-                    <p><strong>Increase in Disease Cases:</strong><span class="badge bg-info"> ${
-                      data.disease_trend
-                    }</span></p>
-                    <p><strong>Ripeness Analysis:</strong><span class="badge bg-info"> ${
-                      data.ripeness_trend
-                    }</span></p>
-                </div>
-
-            </div>
-        `;
-
-    // Show the Bootstrap Modal
     new bootstrap.Modal(document.getElementById("reportModal")).show();
   } catch (error) {
-    console.error("🚨 Error fetching report:", error);
-    document.getElementById(
-      "reportContent"
-    ).innerHTML = `<p>Error loading report.</p>`;
+    console.error(" Error fetching report:", error);
+    document.getElementById("reportContent").innerHTML = `<p>Error loading report.</p>`;
   }
 }
 

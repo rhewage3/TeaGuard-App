@@ -50,6 +50,17 @@
             max-width: 100%;
             max-height: 300px;
         }
+
+        .chart-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
     </style>
 
 </head>
@@ -58,7 +69,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg py-4 py-lg-0 shadow">
         <div class="container px-4">
-            <a href="javascript:void(0)" onclick="loadHomePage()"><img src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
+            <a href="javascript:void(0)" onclick="loadHomePage()"><img
+                    src="../assets/images/logog_name-removebg-preview.png" alt="name_logo"></a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#top-navbar" aria-controls="top-navbar">
                 <i class="bi bi-list"></i>
@@ -74,17 +86,20 @@
                 </button>
                 <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javascript:void(0)" onclick="loadHomePage(); closeOffcanvas()">Home</a>
-    
+                        <a class="nav-link" href="javascript:void(0)"
+                            onclick="loadHomePage(); closeOffcanvas()">Home</a>
+
                     </li>
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javascript:void(0)" onclick="fetchDetectPage(); closeOffcanvas()">Detect</a>
+                        <a class="nav-link" href="javascript:void(0)"
+                            onclick="fetchDetectPage(); closeOffcanvas()">Detect</a>
                     </li>
-                    
-    
-    
+
+
+
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-                        <a class="nav-link" href="javasceipt:void(0)"onclick="fetchDashbordPage(); closeOffcanvas()">Dashboard</a>
+                        <a class="nav-link" href="javasceipt:void(0)"
+                            onclick="fetchDashbordPage(); closeOffcanvas()">Dashboard</a>
                     </li>
                     <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -92,17 +107,19 @@
                             Resources
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="javascript:void(0)" onclick="fetchGuidePage(); closeOffcanvas()">Disease Guide</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                    onclick="fetchGuidePage(); closeOffcanvas()">Disease Guide</a></li>
                             <li><a class="dropdown-item" href="#">Harvest Tips</a></li>
                             <li><a class="dropdown-item" href="#">FAQ</a></li>
                         </ul>
                     </li>
                     <li class="nav-item px-3 px-lg-0 py-1 py-lg-4" id="user-nav">
-                        <a class="nav-link text-center" href="javascript:void(0)" onclick="fetchSignIn(); closeOffcanvas()" id="signin">
+                        <a class="nav-link text-center" href="javascript:void(0)"
+                            onclick="fetchSignIn(); closeOffcanvas()" id="signin">
                             Sign In
                         </a>
                     </li>
-                    
+
                 </ul>
             </div>
         </div>
@@ -144,19 +161,21 @@
             <!-- Charts -->
             <!-- Charts Section -->
             <!-- Charts Section -->
-            <div class="row mt-5">
-                <!-- Disease Prediction Distribution Chart -->
-                <div class="col-md-6 d-flex justify-content-center" data-aos="zoom-in">
-                    <div class="chart-container">
-                        <h6 class="text-center">Disease Prediction Distribution</h6>
+            <!-- Charts Section -->
+            <!-- Charts Section -->
+            <div class="row mt-5 gy-4">
+                <!-- Disease Chart -->
+                <div class="col-12 col-md-6" data-aos="zoom-in">
+                    <div class="chart-container text-center">
+                        <h6 class="mb-3">Disease Prediction Distribution</h6>
                         <canvas id="diseaseChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Ripeness Assessment Chart -->
-                <div class="col-md-6 d-flex justify-content-center" data-aos="zoom-in">
-                    <div class="chart-container">
-                        <h6 class="text-center">Ripeness Prediction Distribution</h6>
+                <!-- Ripeness Chart -->
+                <div class="col-12 col-md-6" data-aos="zoom-in">
+                    <div class="chart-container text-center">
+                        <h6 class="mb-3">Ripeness Prediction Distribution</h6>
                         <canvas id="ripenessChart"></canvas>
                     </div>
                 </div>
@@ -165,18 +184,20 @@
 
 
 
-           <!-- Most Frequent Disease Card -->
-        <div class="row mt-4">
-            <div class="col-md-6" data-aos="fade-up">
-                <div class="card shadow p-4">
-                    <h5 class="mb-3">Most Frequent Disease Detected</h5>
-                    <h3 id="mostFrequentDisease">Loading...</h3>
-                    <button class="btn btn-outline-success mt-3" id="learnMoreBtn" style="display: none;">
-                        <i class="bi bi-book"></i> Learn How to Prevent
-                    </button>
+
+
+            <!-- Most Frequent Disease Card -->
+            <div class="row mt-4">
+                <div class="col-md-6" data-aos="fade-up">
+                    <div class="card shadow p-4">
+                        <h5 class="mb-3">Most Frequent Disease Detected</h5>
+                        <h3 id="mostFrequentDisease">Loading...</h3>
+                        <button class="btn btn-outline-success mt-3" id="learnMoreBtn" style="display: none;">
+                            <i class="bi bi-book"></i> Learn How to Prevent
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
 
 

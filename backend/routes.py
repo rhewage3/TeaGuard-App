@@ -197,5 +197,14 @@ async def get_user_report(request: Request, time_filter: str = "all", db: AsyncS
         "low_confidence": low_confidence,
         "trend": trend,
         "disease_trend": disease_trend,
-        "ripeness_trend": ripeness_trend
+        "ripeness_trend": ripeness_trend,
+        "predictions": [
+    {
+        "type": pred.prediction_type,
+        "result": pred.prediction_result,
+        "confidence": f"{pred.confidence * 100:.2f}%",
+        "date": pred.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+    } for pred in predictions
+]
+
     }

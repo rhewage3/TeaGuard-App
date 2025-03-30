@@ -164,7 +164,6 @@ async def dashboard():
 
 DISEASE_MODEL_PATH = r"R:\IIT\FYP\PROJECT\backend\model\final_model.keras"
 
-
 try:
     disease_model = load_model(DISEASE_MODEL_PATH)
     print("MODEL LOADED SUCCESSFULLY")
@@ -172,8 +171,6 @@ except Exception as e:
     print(f"ERROR LOADING MODEL: {e}")
 
 CLASS_LABLES_DISEASE = ['algal_spot',"brown_blight","gray_blight","healthy","helopeltis","red_spot"]
-
-
 
 @app.post('/predict-disease')
 async def predict_disease(
@@ -219,7 +216,8 @@ async def predict_disease(
 
 
 
-RIPE_MODEL_PATH = r"R:\IIT\FYP\PROJECT\backend\model\Ripe_model.keras"
+# RIPE_MODEL_PATH = r"R:\IIT\FYP\PROJECT\backend\model\Ripe_model.keras"
+RIPE_MODEL_PATH = r"R:\IIT\FYP\PROJECT\backend\model\ripe.keras"
 
 #  Load the model
 try:
