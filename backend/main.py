@@ -227,7 +227,7 @@ except Exception as e:
     print(f" ERROR LOADING RIPE MODEL: {e}")
 
 #  Define class labels
-CLASS_LABELS_RIPE = [" Ripe ", "Ripe", "Ripe", "Overripe"]
+CLASS_LABELS_RIPE = ["Ripe", "Ripe", "Ripe", "Overripe"]
 
 #  Define image preprocessing function
 def preprocess_image(image_bytes):
