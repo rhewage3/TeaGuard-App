@@ -488,7 +488,7 @@ async function loadDashboardData() {
       const historyTable = document.getElementById("historyTable");
 
       if (!totalPred || !diseasePred || !ripenessPred || !historyTable) {
-        console.error("🚨 Missing elements in the DOM! Check your HTML IDs.");
+        console.error(" Missing elements in the DOM! Check your HTML IDs.");
         return;
       }
 
@@ -532,20 +532,23 @@ async function loadDashboardData() {
       // Update History Table
       historyTable.innerHTML = ""; // Clear old rows
       if (data.predictions.length > 0) {
-        data.predictions.forEach((prediction) => {
+        // Show newest predictions first
+        const reversedPredictions = [...data.predictions].reverse();
+
+        reversedPredictions.forEach((prediction) => {
           const row = document.createElement("tr");
           row.innerHTML = `
-                        <td>${
-                          prediction.type.charAt(0).toUpperCase() +
-                          prediction.type.slice(1)
-                        }</td>
-                        <td>${prediction.result}</td>
-                        <td>${prediction.confidence}</td>
-                        <td>${prediction.date}</td>
-                    `;
+      <td>${
+        prediction.type.charAt(0).toUpperCase() + prediction.type.slice(1)
+      }</td>
+      <td>${prediction.result}</td>
+      <td>${prediction.confidence}</td>
+      <td>${prediction.date}</td>
+    `;
           historyTable.appendChild(row);
         });
-        console.log("🟢 Updated History Table");
+
+        console.log("✅ Updated History Table (Newest First)");
       } else {
         historyTable.innerHTML = `<tr><td colspan="4" class="text-center">No history found.</td></tr>`;
       }
@@ -576,7 +579,7 @@ function generateCharts(diseaseData, ripenessData) {
   const ripenessCanvas = document.getElementById("ripenessChart");
 
   if (!diseaseCanvas || !ripenessCanvas) {
-    console.error("🚨 Chart.js Canvas Elements Not Found!");
+    console.error(" Chart.js Canvas Elements Not Found!");
     return;
   }
 
@@ -653,7 +656,9 @@ async function generateReport() {
     console.log(" Report Data:", data);
 
     if (data.message) {
-      document.getElementById("reportContent").innerHTML = `<p>${data.message}</p>`;
+      document.getElementById(
+        "reportContent"
+      ).innerHTML = `<p>${data.message}</p>`;
       return;
     }
 
@@ -698,7 +703,8 @@ async function generateReport() {
               <th>Most Common Disease</th>
               <td>${
                 data.most_common_disease !== "healthy"
-                  ? data.most_common_disease + ` (${data.most_common_disease_count} times)`
+                  ? data.most_common_disease +
+                    ` (${data.most_common_disease_count} times)`
                   : "No major diseases (mostly healthy)"
               }</td>
             </tr>
@@ -736,7 +742,10 @@ async function generateReport() {
             </tr>
           </thead>
           <tbody>
-            ${historyRows || `<tr><td colspan="4" class="text-center">No predictions available</td></tr>`}
+            ${
+              historyRows ||
+              `<tr><td colspan="4" class="text-center">No predictions available</td></tr>`
+            }
           </tbody>
         </table>
       </div>
@@ -745,7 +754,9 @@ async function generateReport() {
     new bootstrap.Modal(document.getElementById("reportModal")).show();
   } catch (error) {
     console.error(" Error fetching report:", error);
-    document.getElementById("reportContent").innerHTML = `<p>Error loading report.</p>`;
+    document.getElementById(
+      "reportContent"
+    ).innerHTML = `<p>Error loading report.</p>`;
   }
 }
 
