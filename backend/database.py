@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 DB_USER = "postgres"
 DB_PASSWORD = "root"  # Replace with your actual password
 # DB_HOST = "localhost"
-DB_HOST = "192.168.1.10"
+DB_HOST = "localhost"
 DB_PORT = "5433"
 DB_NAME = "teaguard"
 
