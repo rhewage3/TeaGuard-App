@@ -12,3 +12,4 @@ pillow
 scikit-image
 scikit-learn
 matplotlib
+email-validator
