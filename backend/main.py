@@ -38,17 +38,7 @@ app.add_middleware(
 app.add_middleware(SessionMiddleware, secret_key="your_secret_key_here")  # Starlette session support
 
 
-# Include Routes for Authentication
-app.include_router(router)
 
-
-
-app.add_middleware(SessionMiddleware, secret_key="your_secret_key_here")  # Enables session storage
-
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, 
-                ssl_keyfile="key.pem", ssl_certfile="cert.pem")
 
 
 # Resolve the frontend directory
@@ -64,6 +54,17 @@ app.mount("/pages", StaticFiles(directory=FRONTEND_DIR / "pages"), name="pages")
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR / "static"), name="static")
 # app.mount("/components", StaticFiles(directory=FRONTEND_DIR / "components"), name="components")
 
+
+
+# Include Routes for Authentication
+app.include_router(router)
+
+
+
+# Run only for local testing
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run("main:app", host="0.0.0.0", port=8000)
 
 #  Manually serve `manifest.json` with the correct MIME type
 @app.get("/static/manifest.json", include_in_schema=False)
