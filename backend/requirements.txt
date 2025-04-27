@@ -8,3 +8,7 @@ gunicorn
 jinja2
 python-dotenv
 tensorflow
+pillow
+scikit-image
+scikit-learn
+matplotlib
