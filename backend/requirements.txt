@@ -1,8 +1,9 @@
 fastapi
-uvicorn
-pillow
-numpy
-tensorflow
+uvicorn[standard]
+sqlalchemy
+asyncpg
+itsdangerous
 python-multipart
 gunicorn
-itsdangerous
+jinja2
+python-dotenv
