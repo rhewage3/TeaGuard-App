@@ -5,5 +5,4 @@ numpy
 tensorflow
 python-multipart
 gunicorn
-sqlalchemy
-asyncpg
+itsdangerous
