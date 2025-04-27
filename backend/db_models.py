@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, TIMESTAMP, func
 from sqlalchemy.orm import relationship
-from database import Base  #  Import Base from database.py
+from database import Base  
 
 class Prediction(Base):
     __tablename__ = "predictions"
-    __table_args__ = {"schema": "main"}  #  Ensure correct schema
+    __table_args__ = {"schema": "main"}  
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("main.users.id", ondelete="SET NULL"), nullable=True)
@@ -20,7 +20,7 @@ class Prediction(Base):
 
 class User(Base):
     __tablename__ = "users"
-    __table_args__ = {"schema": "main"}  #  Ensure correct schema
+    __table_args__ = {"schema": "main"}  
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, nullable=False)

@@ -21,7 +21,7 @@ engine = create_async_engine(DATABASE_URL, echo=True)
 # Create async session factory
 async_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
-# Base class for models (Ensures it's used across all models)
+# Base class for models 
 Base = declarative_base()
 
 #  Dependency to get database session

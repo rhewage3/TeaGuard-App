@@ -107,7 +107,7 @@ async def get_user_predictions(request: Request, db: AsyncSession = Depends(get_
         elif pred.prediction_type == "ripeness":
             ripeness_distribution[pred.prediction_result] = ripeness_distribution.get(pred.prediction_result, 0) + 1
 
-    # 🔥 Find the most common disease (excluding "healthy")
+    #  Find the most common disease (excluding "healthy")
     disease_only = {k: v for k, v in disease_distribution.items() if k.lower() != "healthy"}
     most_common_disease = None
     if disease_only:
@@ -141,7 +141,7 @@ def filter_by_time(query, time_filter):
         return query.filter(Prediction.timestamp >= now - timedelta(weeks=1))
     elif time_filter == "this_month":
         return query.filter(Prediction.timestamp >= now.replace(day=1))
-    return query  # Default is all-time data
+    return query  
 
 
 
