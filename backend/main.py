@@ -47,11 +47,11 @@ FRONTEND_DIR = BASE_DIR.parent / "docs"
 BACKEND_DIR = BASE_DIR.parent/".backend"
 
 # Mount static file directories
-app.mount("/assets", StaticFiles(directory=FRONTEND_DIR / "assets"), name="assets")
-app.mount("/css", StaticFiles(directory=FRONTEND_DIR / "css"), name="css")
-app.mount("/js", StaticFiles(directory=FRONTEND_DIR / "js"), name="js")
-app.mount("/pages", StaticFiles(directory=FRONTEND_DIR / "pages"), name="pages")
-app.mount("/static", StaticFiles(directory=FRONTEND_DIR / "static"), name="static")
+# app.mount("/assets", StaticFiles(directory=FRONTEND_DIR / "assets"), name="assets")
+# app.mount("/css", StaticFiles(directory=FRONTEND_DIR / "css"), name="css")
+# app.mount("/js", StaticFiles(directory=FRONTEND_DIR / "js"), name="js")
+# app.mount("/pages", StaticFiles(directory=FRONTEND_DIR / "pages"), name="pages")
+# app.mount("/static", StaticFiles(directory=FRONTEND_DIR / "static"), name="static")
 # app.mount("/components", StaticFiles(directory=FRONTEND_DIR / "components"), name="components")
 
 
