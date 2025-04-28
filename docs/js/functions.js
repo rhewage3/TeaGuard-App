@@ -12,7 +12,7 @@ function closeOffcanvas() {
 
 async function checkSession() {
   try {
-    const response = await fetch("/session-info");
+    const response = await fetch("teaguard-app-production.up.railway.app/session-info");
     const data = await response.json();
 
     if (data.logged_in) {
@@ -30,7 +30,7 @@ async function updateNavbar() {
   console.log("Updating Navbar...");
 
   try {
-    const response = await fetch("/session-info", { credentials: "include" });
+    const response = await fetch("teaguard-app-production.up.railway.app/session-info", { credentials: "include" });
     if (!response.ok) throw new Error("Failed to fetch session data");
 
     const data = await response.json();
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", updateNavbar);
 //  Logout Function (Removes Session)
 async function logout() {
   try {
-    await fetch("/logout", { method: "POST" });
+    await fetch("teaguard-app-production.up.railway.app/logout", { method: "POST" });
     checkSession(); // Refresh navbar
     location.reload(); // reload page
   } catch (error) {
@@ -101,7 +101,7 @@ async function loginUser(event) {
   formData.append("username", email);
   formData.append("password", password);
 
-  const response = await fetch("/login", {
+  const response = await fetch("teaguard-app-production.up.railway.app/login", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: formData,
@@ -145,7 +145,7 @@ async function SignInUser(event) {
 
   try {
     // Send registration request
-    const response = await fetch("/register", {
+    const response = await fetch("teaguard-app-production.up.railway.app/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestData),
@@ -399,7 +399,7 @@ function scanImage() {
                               </div>`;
 
   // Send the image to the backend for processing
-  fetch(apiEndpoint, {
+  fetch("teaguard-app-production.up.railway.app"+apiEndpoint, {
     method: "POST",
     body: formData,
   })
@@ -474,7 +474,7 @@ async function loadDashboardData() {
   try {
     console.log("🔄 Fetching user predictions...");
 
-    const response = await fetch("/user-predictions");
+    const response = await fetch("teaguard-app-production.up.railway.app/user-predictions");
     if (!response.ok) throw new Error("Failed to fetch user predictions.");
 
     const data = await response.json();
@@ -649,7 +649,7 @@ async function generateReport() {
     console.log(" Fetching report data...");
 
     const timeFilter = document.getElementById("reportFilter").value;
-    const response = await fetch(`/user-report?time_filter=${timeFilter}`);
+    const response = await fetch(`teaguard-app-production.up.railway.app/user-report?time_filter=${timeFilter}`);
     if (!response.ok) throw new Error("Failed to fetch report data.");
 
     const data = await response.json();
