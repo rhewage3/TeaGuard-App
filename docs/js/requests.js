@@ -3,7 +3,7 @@ console.log("requests js working")
 
 
 function fetchSignIn() {
-    fetch('teaguard-app-production.up.railway.app/signIn')
+    fetch('/signIn')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch the sign-in page.');
@@ -21,7 +21,7 @@ function fetchSignIn() {
 
 
 function fetchLogIn() {
-    fetch('teaguard-app-production.up.railway.app/logIn')
+    fetch('/logIn')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch the log-in page.');
@@ -40,7 +40,7 @@ function fetchLogIn() {
 
 
 function loadHomePage() {
-    fetch('teaguard-app-production.up.railway.app/')
+    fetch('/')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to load the homepage.');
@@ -60,7 +60,7 @@ function loadHomePage() {
 
 
 function fetchDetectPage() {
-    fetch('teaguard-app-production.up.railway.app/upload')  
+    fetch('/upload')  
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch the upload page.');
@@ -77,7 +77,7 @@ function fetchDetectPage() {
 }
 
 function fetchDashbordPage() {
-    fetch('teaguard-app-production.up.railway.app/dashboard')  
+    fetch('/dashboard')  
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch the dashboard page.');
@@ -102,7 +102,7 @@ function fetchDashbordPage() {
 
 // Function to fetch the guide page dynamically when "Learn More" is clicked
 function fetchGuidePage(url) {
-    fetch("teaguard-app-production.up.railway.app/guide")
+    fetch("/guide")
         .then(response => {
             if (!response.ok) {
                 throw new Error("Failed to fetch the guide page.");

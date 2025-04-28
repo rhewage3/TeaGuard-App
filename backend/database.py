@@ -5,29 +5,32 @@ from urllib.parse import quote_plus
 # Database Configuration
 
 # Local
-# DB_USER = "postgres"
-# DB_PASSWORD = "root"
-# DB_HOST = "localhost"
-# DB_PORT = "5433"
-# DB_NAME = "teaguard"
-# DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DB_USER = "postgres"
+DB_PASSWORD = "root"
+DB_HOST = "localhost"
+DB_PORT = "5433"
+DB_NAME = "teaguard"
+DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 # Supabase
-DB_PASSWORD = "@Rhewage3"
-ENCODED_PASSWORD = quote_plus(DB_PASSWORD)
+# DB_PASSWORD = "@Rhewage3"
+# ENCODED_PASSWORD = quote_plus(DB_PASSWORD)
 
-DATABASE_URL = f"postgresql+asyncpg://postgres.uypqhcslykxopdouxjgs:{ENCODED_PASSWORD}@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+# DATABASE_URL = f"postgresql+asyncpg://postgres.uypqhcslykxopdouxjgs:{ENCODED_PASSWORD}@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
 
-#  SSL options to skip verification
-connect_args = {
-    "ssl": False
-}
+# #  SSL options to skip verification
+# connect_args = {
+#     "ssl": False
+# }
 
-engine = create_async_engine(
-    DATABASE_URL,
-    echo=True,
-    connect_args=connect_args,
-)
+# engine = create_async_engine(
+#     DATABASE_URL,
+#     echo=True,
+#     connect_args=connect_args,
+# )
+
+# Create async engine
+engine = create_async_engine(DATABASE_URL, echo=True)
 
 # Create async session
 async_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
